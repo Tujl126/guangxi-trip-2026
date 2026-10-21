@@ -512,6 +512,16 @@ function launchApp(scheme, webUrl) {
 function qunarBase() {
   return IS_IOS ? 'qunariphone' : 'qunaraphone';
 }
+function qunarHyUrl(webUrl) {
+  const u = encodeURIComponent(webUrl);
+  if (IS_ANDROID) {
+    return `intent://hy?isTransferHome=true&type=navibar-none&url=${u}#Intent;scheme=qunaraphone;package=com.Qunar;S.browser_fallback_url=${u};end`;
+  }
+  return `${qunarBase()}://hy?isTransferHome=true&type=navibar-none&url=${u}`;
+}
+function qunarHotelUrl(p) {
+  return `https://hotel.qunar.com/cn/${p.cityUrl}/q-${encodeURIComponent(p.keyword)}?fromDate=${p.fromDate}&toDate=${p.toDate}&cityName=${encodeURIComponent(p.cityName)}`;
+}
 function qunarHotelScheme(p) {
   const qs = new URLSearchParams({
     ...p,
@@ -520,11 +530,21 @@ function qunarHotelScheme(p) {
     checkInDate: p.fromDate,
     checkOutDate: p.toDate
   });
-  return `${qunarBase()}://hotel/index?${qs.toString()}`;
+  const path = `hotel/index?${qs.toString()}`;
+  if (IS_ANDROID) {
+    const fallback = encodeURIComponent(qunarHotelUrl(p));
+    return `intent://${path}#Intent;scheme=qunaraphone;package=com.Qunar;S.browser_fallback_url=${fallback};end`;
+  }
+  return `${qunarBase()}://${path}`;
 }
 function openDidi(name, lat, lng) {
   if (IN_APP_WEBVIEW) { window.location.href = didiUrl(name, lat, lng); return; }
   if (!IS_MOBILE) { window.open(didiUrl(name, lat, lng), '_blank'); return; }
+  if (IS_ANDROID) {
+    const fallback = encodeURIComponent(didiUrl(name, lat, lng));
+    window.location.href = `intent://open#Intent;scheme=diditaxi;package=com.sdu.didi.psnger;S.browser_fallback_url=${fallback};end`;
+    return;
+  }
   let leftPage = false;
   const onVis = () => { if (document.hidden) leftPage = true; };
   document.addEventListener('visibilitychange', onVis);
@@ -535,29 +555,22 @@ function openDidi(name, lat, lng) {
   }, 1500);
 }
 function openQunar(webUrl) {
-  // 去哪儿注册了 *.qunar.com 的 App Links，直接打开 HTTPS 会被 App 接管
+  if (IN_APP_WEBVIEW) { window.location.href = webUrl; return; }
   if (!IS_MOBILE) { window.open(webUrl, '_blank'); return; }
-  window.location.href = webUrl;
+  window.location.href = qunarHyUrl(webUrl);
 }
 function open12306(arg) {
-  const [fromPinyin, toPinyin, fromName, toName, fromCode, toCode, date] = (arg || '').split('|');
-  const scheme = `cn.12306://ticket?from=${encodeURIComponent(fromPinyin)}&to=${encodeURIComponent(toPinyin)}&date=${date}`;
+  const [, , fromName, toName, fromCode, toCode, date] = (arg || '').split('|');
   const web = `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(fromName)},${fromCode}&ts=${encodeURIComponent(toName)},${toCode}&date=${date}&flag=N,N,Y`;
-  if (IN_APP_WEBVIEW) { window.location.href = web; return; }
   if (!IS_MOBILE) { window.open(web, '_blank'); return; }
-  let leftPage = false;
-  const onVis = () => { if (document.hidden) leftPage = true; };
-  document.addEventListener('visibilitychange', onVis);
-  window.location.href = scheme;
-  setTimeout(() => {
-    document.removeEventListener('visibilitychange', onVis);
-    if (!leftPage && !document.hidden) window.location.href = web;
-  }, 1500);
+  window.location.href = web;
 }
 function openHotel(locKey) {
   const loc = window._extLocs[locKey]; if (!loc) return;
   if (!loc.hotelParams) { openQunar(loc.hotel); return; }
-  launchApp(qunarHotelScheme(loc.hotelParams), loc.hotel);
+  if (IN_APP_WEBVIEW) { window.location.href = qunarHotelUrl(loc.hotelParams); return; }
+  if (!IS_MOBILE) { window.open(qunarHotelUrl(loc.hotelParams), '_blank'); return; }
+  window.location.href = qunarHotelScheme(loc.hotelParams);
 }
 function openCtrip(webUrl) {
   launchApp('ctrip://homepage', webUrl);
@@ -661,6 +674,7 @@ asOverlay.addEventListener('click', e => { if (e.target === asOverlay) closeAS()
 
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
 function amapAppUrl(name, lat, lng) {
   const scheme = IS_IOS ? 'iosamap' : 'androidamap';
   return `${scheme}://viewMap?sourceApplication=trip&poiname=${encodeURIComponent(name)}&lat=${lat}&lon=${lng}&dev=0`;
