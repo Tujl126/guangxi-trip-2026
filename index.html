@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>广西四城 7 天 · 桂林 → 柳州 → 南宁 → 北海｜2026.10.25–10.31</title>
+<meta name="description" content="两人广西 7 天休闲行程：桂林、阳朔、柳州、南宁、北海。高铁 + 动车 + 航班，含螺蛳粉、每天怎么走和预算。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   Design System — edit :root to change theme
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f5f5f7;
+  --bg-tertiary:   #fbfbfd;
+  --bg-grouped:    #f2f2f7;
+  --bg-elevated:   #ffffff;
+  --text-primary:   #1d1d1f;
+  --text-secondary: #86868b;
+  --text-tertiary:  #aeaeb2;
+  --accent:        #0071e3;
+  --accent-hover:  #0077ed;
+  --tint-red:    #ff3b30;
+  --tint-orange: #ff9500;
+  --tint-green:  #34c759;
+  --tint-blue:   #007aff;
+  --tint-purple: #af52de;
+  --tint-pink:   #ff2d55;
+  --separator:  rgba(60, 60, 67, .12);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 14px rgba(0,0,0,.08);
+  --shadow-lg:  0 8px 30px rgba(0,0,0,.12);
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+               "Helvetica Neue", "Arial", sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Map ── */
+#map { width: 100%; height: 40vh; min-height: 280px; position: sticky; top: 0; z-index: 100; }
+.locate-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+  border: none; box-shadow: 0 1px 4px rgba(0,0,0,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.locate-btn.active { color: #007aff; }
+@keyframes loc-pulse {
+  0%   { transform: scale(1); opacity: .55; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.loc-pulse {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(0,122,255,.25);
+  animation: loc-pulse 1.6s ease-out infinite;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex; gap: 6px; padding: 12px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(255,255,255,.85); -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px); position: sticky; top: 40vh; z-index: 99;
+  border-bottom: .5px solid var(--separator); scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0; padding: 7px 16px; border-radius: 980px; border: none;
+  background: var(--bg-grouped); color: var(--text-secondary);
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: all .25s ease;
+  white-space: nowrap; letter-spacing: -0.01em;
+}
+.tab:active { transform: scale(.96); }
+.tab.active { background: var(--accent); color: #fff; }
+
+/* ── Main content ── */
+.content { max-width: 680px; margin: 0 auto; padding: 16px 16px calc(24px + var(--safe-bottom)); }
+
+/* ── Overview ── */
+.hero { text-align: center; padding: 28px 20px 20px; }
+.hero h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
+.hero .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 6px; font-weight: 400; }
+
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.info-card { background: var(--bg-elevated); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm); }
+.info-card .label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .02em; margin-bottom: 6px; }
+.info-card .value { font-size: 15px; font-weight: 600; line-height: 1.4; }
+
+/* ── Section headers ── */
+.section-head { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .03em; padding: 20px 0 8px; }
+
+/* ── Day header ── */
+.day-head { padding: 20px 0 12px; }
+.day-head h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.day-head p { font-size: 15px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ── Route bar ── */
+.route-bar { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
+.route-bar strong { color: var(--text-primary); }
+
+/* ── Timeline ── */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content: ''; position: absolute; left: 7px; top: 20px; bottom: 20px; width: 1.5px; background: var(--separator); }
+.tl-item { position: relative; margin-bottom: 10px; }
+.tl-dot { position: absolute; left: -20px; top: 18px; width: 10px; height: 10px; border-radius: 50%; z-index: 1; box-shadow: 0 0 0 3px var(--bg-secondary); }
+.tl-dot.food    { background: var(--tint-red); }
+.tl-dot.spot    { background: var(--tint-blue); }
+.tl-dot.hotel   { background: var(--tint-orange); }
+.tl-dot.drink   { background: var(--tint-purple); }
+.tl-dot.transport { background: var(--text-tertiary); }
+
+/* ── Card ── */
+.card { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-sm); transition: box-shadow .25s ease; cursor: pointer; }
+.card:active { box-shadow: var(--shadow-md); }
+.card .time { font-size: 12px; font-weight: 600; color: var(--text-tertiary); letter-spacing: .01em; }
+.card .name { font-size: 17px; font-weight: 600; margin: 2px 0 4px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
+.card .desc { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
+
+/* Badge */
+.badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; }
+.badge.food   { background: rgba(255,59,48,.1);  color: var(--tint-red); }
+.badge.spot   { background: rgba(0,122,255,.1);  color: var(--tint-blue); }
+.badge.drink  { background: rgba(175,82,222,.1); color: var(--tint-purple); }
+
+/* Budget */
+.budget { display: inline-block; margin-top: 6px; padding: 3px 10px; background: var(--bg-grouped); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+
+/* Payment */
+.pays { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.pay { font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+.pay.ok  { background: rgba(52,199,89,.1);  color: var(--tint-green); }
+.pay.no  { background: rgba(255,59,48,.08); color: var(--tint-red); }
+.pay.idk { background: rgba(255,149,0,.1);  color: var(--tint-orange); }
+
+/* Links row */
+.links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 8px 14px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+  text-decoration: none !important; transition: filter .2s;
+}
+.btn:active { filter: brightness(.9); }
+.btn.nav    { background: var(--accent); color: #fff; }
+.btn.taxi   { background: #ff7a00; color: #fff; }
+.btn.xhs    { background: #ff2442; color: #fff; }
+.btn.dp     { background: #ffa700; color: #fff; }
+.btn.rsv    { background: var(--tint-green); color: #fff; }
+.btn.ticket { background: #00a6a6; color: #fff; }
+.btn.hotelbook { background: #7b61ff; color: #fff; }
+
+/* Action Sheet */
+.as-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.35); backdrop-filter: blur(2px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.as-overlay.show { opacity: 1; pointer-events: auto; }
+.as-sheet {
+  width: 100%; max-width: 420px;
+  padding: 0 8px 34px;
+  transform: translateY(100%); transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+.as-overlay.show .as-sheet { transform: translateY(0); }
+.as-group {
+  background: rgba(255,255,255,.88); backdrop-filter: blur(20px);
+  border-radius: 14px; overflow: hidden; margin-bottom: 8px;
+}
+.as-group .as-item {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px; font-size: 18px; color: #007aff; font-weight: 500;
+  border: none; background: none; width: 100%; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.as-group .as-item + .as-item { border-top: .5px solid rgba(0,0,0,.12); }
+.as-group .as-item:active { background: rgba(0,0,0,.06); }
+.as-cancel { font-weight: 600; }
+
+/* Details — default open */
+.details {
+  margin-top: 10px; padding-top: 10px;
+  border-top: .5px solid var(--separator);
+  font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+}
+.details.closed { display: none; }
+
+/* ── Overview day list ── */
+.day-list .card { margin-bottom: 8px; }
+.day-list .card .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+
+/* ── Payment summary ── */
+.pay-summary { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-sm); font-size: 13px; line-height: 1.7; margin-bottom: 10px; }
+.pay-summary h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.pay-summary .warn { color: var(--tint-red); }
+.pay-summary .ok-text { color: var(--tint-green); }
+
+/* ── Legend ── */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 8px 0; font-size: 12px; color: var(--text-secondary); }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── Leaflet overrides ── */
+.leaflet-popup-content-wrapper { border-radius: var(--radius-md) !important; box-shadow: var(--shadow-lg) !important; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif !important; }
+.leaflet-popup-content { font-size: 14px !important; line-height: 1.5 !important; margin: 12px 14px !important; }
+.leaflet-popup-content a { color: var(--accent) !important; }
+.leaflet-popup-tip { background: #fff !important; }
+.leaflet-control-zoom a { width: 34px !important; height: 34px !important; line-height: 34px !important; font-size: 16px !important; border-radius: 10px !important; background: rgba(255,255,255,.85) !important; -webkit-backdrop-filter: blur(10px) !important; backdrop-filter: blur(10px) !important; border: .5px solid var(--separator) !important; color: var(--text-primary) !important; }
+.leaflet-control-zoom { border-radius: 12px !important; overflow: hidden; box-shadow: var(--shadow-md) !important; border: none !important; }
+.leaflet-control-attribution { font-size: 9px !important; opacity: .5; }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="tabs" id="tabs"></div>
+<div class="content" id="content"></div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  REPLACE THIS SECTION — Hotel and Days data                 ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+const HOTEL = { name: '桂林中心广场（住宿区域）', lat: 25.2778, lng: 110.2917 };
+
+const DAYS = [
+  { id: 0, label: '总览', color: '#0071e3', locations: [] },
+  { id: 1, label: 'D1', date: '10/25 周日', title: '南昌 → 桂林', color: '#ff9500', locations: [
+    { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', ticket: qunarTrainUrl('南昌西','桂林北','2026-10-25') },
+    { name: '桂林北站', lat: 25.3374, lng: 110.2886, type: 'transport', time: '17:23', desc: '到站后打车到中心广场约 25–30 分钟，¥30 左右。', gmap: '桂林北站' },
+    { name: '住宿：桂林中心广场', lat: 25.2778, lng: 110.2917, type: 'hotel', time: '18:20', desc: '住东西巷/中心广场一带，步行可到正阳步行街。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/' },
+    { name: '又益轩米粉', lat: 25.2801, lng: 110.2949, type: 'food', time: '19:00', desc: '解放西路百年老店，招牌马肉米粉。先干拌后加汤，人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '桂林 又益轩 马肉米粉', dianpingKeyword: '又益轩 桂林' },
+    { name: '东西巷', lat: 25.2816, lng: 110.2945, type: 'spot', time: '20:00', desc: '桂林老街区，青砖灰瓦，晚上亮灯好拍。免费。', gmap: '东西巷 桂林' },
+    { name: '正阳步行街', lat: 25.2796, lng: 110.2937, type: 'spot', time: '20:40', desc: '桂林最热闹的步行街，小吃补给点。免费。', gmap: '正阳步行街 桂林' },
+    { name: '日月双塔夜景', lat: 25.2741, lng: 110.2902, type: 'spot', time: '21:10', desc: '两江四湖边，金银双塔亮灯。沿湖散步免费，不必买游船票。', gmap: '日月双塔 桂林' }
+  ]},
+  { id: 2, label: 'D2', date: '10/26 周一', title: '漓江 → 阳朔 · 遇龙河', color: '#007aff', locations: [
+    { name: '磨盘山码头', lat: 25.1506, lng: 110.4269, type: 'transport', time: '07:40', desc: '从市区打车约 30–40 分钟，¥40–50。提前取票、安检。', gmap: '磨盘山码头 桂林' },
+    { name: '漓江精华段游船', lat: 25.0500, lng: 110.4400, type: 'spot', time: '08:30', desc: '磨盘山 → 阳朔龙头山，约 4 小时。三星船 ¥215/人，坐着看九马画山、黄布倒影。', budget: '¥215', reserve: 'https://www.ctrip.com', qunar: 'https://piao.qunar.com/ticket/list.htm?keyword=' + encodeURIComponent('漓江游船'), xhsKeyword: '漓江游船 三星船 攻略' },
+    { name: '阳朔龙头山码头', lat: 24.7740, lng: 110.4960, type: 'transport', time: '12:30', desc: '下船即到阳朔县城，步行/打车去西街。', gmap: '龙头山码头 阳朔' },
+    { name: '住宿：阳朔西街', lat: 24.7782, lng: 110.4906, type: 'hotel', time: '13:40', desc: '放下行李，午休 20 分钟再出发。参考 ¥180–260/间。', budget: '¥180–260/晚', hotel: 'https://hotel.qunar.com/' },
+    { name: '金龙桥码头（遇龙河竹筏）', lat: 24.8189, lng: 110.3887, type: 'spot', time: '14:50', desc: '竹筏约 15:00 开漂，金龙桥 → 旧县约 90 分钟、过 9 个堤坝。双人筏约 ¥320。', budget: '¥160/人', reserve: 'https://www.ctrip.com', qunar: 'https://piao.qunar.com/ticket/list.htm?keyword=' + encodeURIComponent('遇龙河竹筏'), xhsKeyword: '遇龙河竹筏 金龙桥 旧县 攻略' },
+    { name: '旧县码头', lat: 24.8075, lng: 110.4105, type: 'transport', time: '16:30', desc: '下筏后回西街约 15–20 分钟，不赶时间。', gmap: '旧县码头 阳朔' },
+    { name: '彭大姐啤酒鱼', lat: 24.7775, lng: 110.4920, type: 'food', time: '18:30', desc: '点套餐或明码标价，点鱼前确认单价 + 当面称重。人均 ¥60–100。', budget: '¥60–100', xhsKeyword: '阳朔 啤酒鱼 防坑', dianpingKeyword: '彭大姐啤酒鱼 阳朔' },
+    { name: '西街夜逛', lat: 24.7778, lng: 110.4910, type: 'spot', time: '20:30', desc: '阳朔最热闹的街，酒吧和小店集中。随便逛，累了就回。', gmap: '西街 阳朔' }
+  ]},
+  { id: 3, label: 'D3', date: '10/27 周二', title: '阳朔 → 柳州', color: '#af52de', locations: [
+    { name: '西街早午餐', lat: 24.7776, lng: 110.4912, type: 'food', time: '10:30', desc: '睡到自然醒，吃碗米粉或早午餐，再慢慢退房。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '阳朔 西街 早午餐', dianpingKeyword: '西街 阳朔 早午餐' },
+    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', ticket: qunarTrainUrl('阳朔','柳州','2026-10-27') },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '16:30', desc: 'G3876 14:57–16:30，二等座约 ¥80。打车到五星街约 15 分钟。', gmap: '柳州站' },
+    { name: '住宿：柳州五星步行街', lat: 24.3138, lng: 109.4100, type: 'hotel', time: '17:20', desc: '住五星街/柳江边，吃螺蛳粉和逛窑埠都方便。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/' },
+    { name: '聚宝螺蛳粉', lat: 24.3164, lng: 109.4068, type: 'food', time: '18:10', desc: '柳州老牌螺蛳粉，汤底浓、酸辣正。人均 ¥15–20；饭点排队，错峰去。', budget: '¥15–20', xhsKeyword: '柳州 聚宝螺蛳粉', dianpingKeyword: '聚宝螺蛳粉 柳州' },
+    { name: '窑埠古镇', lat: 24.3185, lng: 109.4232, type: 'spot', time: '19:15', desc: '柳江边仿古街区，18:00 后亮灯，夜景最好看。免费。', gmap: '窑埠古镇 柳州' },
+    { name: '柳江音乐喷泉', lat: 24.3088, lng: 109.4135, type: 'spot', time: '20:00', desc: '滨江东路江边，20:00 / 21:00 各一场，约 15 分钟，免费（场次以现场公告为准）。', gmap: '柳江音乐喷泉 柳州' }
+  ]},
+  { id: 4, label: 'D4', date: '10/28 周三', title: '柳州 → 南宁', color: '#34c759', locations: [
+    { name: '西环肥仔螺蛳粉', lat: 24.3154, lng: 109.4039, type: 'food', time: '08:30', desc: '24 小时营业，红油香而不呛，可免费续粉。人均 ¥15–22。', budget: '¥15–22', xhsKeyword: '柳州 西环肥仔螺蛳粉', dianpingKeyword: '西环肥仔 螺蛳粉' },
+    { name: '龙潭公园', lat: 24.2860, lng: 109.4101, type: 'spot', time: '09:40', desc: '免费，喀斯特山水 + 风雨桥，走 1.5 小时刚好。不想走路可换水上公交（¥3）。', gmap: '龙潭公园 柳州' },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', ticket: qunarTrainUrl('柳州','南宁东','2026-10-28') },
+    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '14:10', desc: '地铁 1 号线到朝阳广场，约 25 分钟。', gmap: '南宁东站' },
+    { name: '住宿：南宁朝阳广场', lat: 22.8196, lng: 108.3170, type: 'hotel', time: '14:40', desc: '先午休，傍晚再出门。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/' },
+    { name: '三街两巷', lat: 22.8169, lng: 108.3159, type: 'spot', time: '17:30', desc: '南宁老城骑楼街区，城隍庙、漓江书院。免费，慢慢逛 1 小时。', gmap: '三街两巷 南宁' },
+    { name: '复记老友粉（中山路）', lat: 22.8100, lng: 108.3200, type: 'food', time: '19:00', desc: '30 多年老店，老友猪杂粉，人均 ¥13–15。夜市继续吃烧烤、酸嘢、糖水。', budget: '¥13–15', xhsKeyword: '南宁 复记老友粉 中山路', dianpingKeyword: '复记老友 中山路' }
+  ]},
+  { id: 5, label: 'D5', date: '10/29 周四', title: '南宁 → 北海', color: '#30b0c7', locations: [
+    { name: '南宁早午餐', lat: 22.8190, lng: 108.3180, type: 'food', time: '10:00', desc: '睡到自然醒，找家老友粉或卷粉慢慢吃。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '南宁 老友粉 推荐', dianpingKeyword: '老友粉 南宁' },
+    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', ticket: qunarTrainUrl('南宁东','北海','2026-10-29') },
+    { name: '北海站', lat: 21.4654, lng: 109.1150, type: 'transport', time: '13:40', desc: '打车到侨港约 10 分钟。', gmap: '北海站' },
+    { name: '住宿：北海侨港', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '14:10', desc: '连住两晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/' },
+    { name: '银滩', lat: 21.4070, lng: 109.1513, type: 'spot', time: '15:30', desc: '免费。下午不赶行程，踩水、坐着看海，想躺多久躺多久。', gmap: '北海银滩' },
+    { name: '侨港风情街', lat: 21.4277, lng: 109.1206, type: 'spot', time: '18:00', desc: '北海最集中的小吃街，海鲜大排档 + 糖水。', gmap: '侨港风情街 北海' },
+    { name: '24栋糖水', lat: 21.4282, lng: 109.1212, type: 'food', time: '18:30', desc: '五加糖水、板栗桂圆，¥6–12。隔壁有间冰室炒冰 ¥10–15。', budget: '¥10–20', xhsKeyword: '北海 侨港 24栋糖水', dianpingKeyword: '24栋糖水 北海' }
+  ]},
+  { id: 6, label: 'D6', date: '10/30 周五', title: '北海慢游', color: '#ff2d55', locations: [
+    { name: '侨港早餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '09:00', desc: '蟹仔粉、卷粉、虾饼，慢慢吃。人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '北海 侨港 早餐 蟹仔粉', dianpingKeyword: '侨港 早餐 北海' },
+    { name: '北海老街', lat: 21.4864, lng: 109.1137, type: 'spot', time: '10:00', desc: '骑楼老街，虾饼、海鲜粥、糖水。免费，逛 1.5 小时。', gmap: '北海老街' },
+    { name: '侨港午餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '12:00', desc: '回侨港吃海鲜或越南卷粉，人均 ¥50–80。', budget: '¥50–80', xhsKeyword: '北海 侨港 海鲜 推荐', dianpingKeyword: '侨港 海鲜 北海' },
+    { name: '冠头岭', lat: 21.4590, lng: 109.0610, type: 'spot', time: '15:30', desc: '北海西端海岸，免费。走栈道、看海，傍晚等日落。', gmap: '冠头岭 北海' },
+    { name: '侨港晚餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '18:30', desc: '最后一顿海鲜：先问单价和加工费。人均 ¥60–100。', budget: '¥60–100', xhsKeyword: '北海 侨港 海鲜 防坑', dianpingKeyword: '侨港 海鲜 北海' },
+    { name: '住宿：北海侨港（连住）', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '20:00', desc: '连住第二晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/' }
+  ]},
+  { id: 7, label: 'D7', date: '10/31 周六', title: '北海 → 南昌', color: '#8e8e93', locations: [
+    { name: '侨港早餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '08:30', desc: '蟹仔粉、卷粉、虾饼。人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '北海 侨港 早餐 蟹仔粉', dianpingKeyword: '侨港 早餐 北海' },
+    { name: '北海老街', lat: 21.4864, lng: 109.1137, type: 'spot', time: '10:00', desc: '补拍、买手信，别逛太晚。', gmap: '北海老街' },
+    { name: '北海福成机场', lat: 21.5394, lng: 109.2939, type: 'transport', time: '12:30', desc: '打车过去约 30 分钟（¥50–70）。优先订 15:00 后的直飞南昌航班。', gmap: '北海福成机场', ticket: qunarFlightUrl('北海','南昌','2026-10-31'), ticketLabel: '🎫 去哪儿机票' },
+    { name: '南昌昌北机场', lat: 28.8650, lng: 115.9000, type: 'transport', time: '15:30', desc: '若没有北海直飞，改走北海→南宁东动车 + 南宁吴圩机场飞南昌。', gmap: '南昌昌北机场' }
+  ]}
+];
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  REPLACE THIS SECTION — Overview tab content                ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+function overviewContent() {
+  return `
+<div class="hero"><h1>广西四城 7 天</h1><p class="subtitle">桂林 → 柳州 → 南宁 → 北海 · 2026.10.25–10.31 · 两人 · 人均约 ¥3,000–3,200</p></div>
+<div class="info-grid">
+  <div class="info-card"><div class="label">住宿</div><div class="value">桂林 1 晚 · 阳朔 1 晚<br>柳州 1 晚 · 南宁 1 晚<br>北海 2 晚</div></div>
+  <div class="info-card"><div class="label">交通</div><div class="value">高铁 + 动车 + 航班<br>返程：北海或南宁飞南昌</div></div>
+  <div class="info-card"><div class="label">证件</div><div class="value">身份证 + 学生证<br>部分景点有学生优惠</div></div>
+  <div class="info-card"><div class="label">预估费用</div><div class="value">人均 ¥3,000–3,200<br>含往返交通和 6 晚住宿</div></div>
+</div>
+<div class="section-head">行程概览</div>
+<div class="day-list">${DAYS.slice(1).map(d=>`<div class="card" onclick="go(${d.id})"><div class="name"><span class="dot" style="background:${d.color}"></span>${d.label} · ${d.title}</div><div class="desc">${d.date}</div></div>`).join('')}</div>
+<div class="section-head">关键提醒</div>
+<div class="card" style="margin-bottom:10px"><div class="name">🍜 柳州只做三件事</div><div class="desc">吃螺蛳粉（聚宝 / 西环肥仔）、逛窑埠古镇、看柳江音乐喷泉。不排龙潭大环线，睡醒再出门。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🛋️ 休闲版排法</div><div class="desc">每天最多 2 个主项目，删掉十里画廊、青秀山、涠洲岛；D3 睡到自然醒，D5 下午银滩发呆，D6 北海慢游。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🌧️ 天气变量</div><div class="desc">漓江游船、遇龙河竹筏遇大雨会停；停航就改高铁到阳朔/兴坪，或者在西街喝咖啡。返程机票仍订 15:00 后。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🎫 现在就订</div><div class="desc">10/25 高铁、10/26 漓江 + 遇龙河、10/27 阳朔→柳州、10/28 柳州→南宁、10/29 南宁→北海、10/31 返程机票、6 晚住宿。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🧳 去哪儿预订</div><div class="desc">高铁、机票、漓江游船和遇龙河竹筏都可以在去哪儿比价预订。<a href="https://www.qunar.com/" target="_blank">打开去哪儿 →</a></div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🍜 吃饭防坑</div><div class="desc">柳州螺蛳粉随便进老店都不差，不必死磕网红排队；阳朔啤酒鱼先问单价、当面称重；北海海鲜先问加工费。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🧥 穿衣</div><div class="desc">桂林/柳州早晚 15–18℃，带薄外套；北海白天 25–30℃，短袖 + 防晒。带雨具、拖鞋。</div></div>
+<div class="section-head">支付提醒</div>
+<div class="card" style="margin-bottom:10px"><div class="desc">全程微信/支付宝可用。小摊可能收现金，带 ¥300 现金。高铁票在 12306 买，机票和门票可以在去哪儿比价。</div></div>
+<div class="section-head">图例</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-red)"></div>餐厅</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-blue)"></div>景点</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tint-orange)"></div>酒店</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--text-tertiary)"></div>交通</div>
+</div>`;
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ENGINE — Do not modify below unless customizing behavior   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+/* ── WGS84 → GCJ-02（高德瓦片使用 GCJ-02 坐标系） ── */
+const PI = Math.PI, GCJ_A = 6378245.0, GCJ_EE = 0.00669342162296594323;
+function outOfChina(lat, lng) { return lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271; }
+function transformLat(x, y) {
+  let ret = -100.0 + 2.0*x + 3.0*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+  ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0/3.0;
+  ret += (20.0*Math.sin(y*PI) + 40.0*Math.sin(y/3.0*PI)) * 2.0/3.0;
+  ret += (160.0*Math.sin(y/12.0*PI) + 320*Math.sin(y*PI/30.0)) * 2.0/3.0;
+  return ret;
+}
+function transformLng(x, y) {
+  let ret = 300.0 + x + 2.0*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+  ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0/3.0;
+  ret += (20.0*Math.sin(x*PI) + 40.0*Math.sin(x/3.0*PI)) * 2.0/3.0;
+  ret += (150.0*Math.sin(x/12.0*PI) + 300.0*Math.sin(x/30.0*PI)) * 2.0/3.0;
+  return ret;
+}
+function wgs84ToGcj02(lat, lng) {
+  if (outOfChina(lat, lng)) return [lat, lng];
+  let dLat = transformLat(lng - 105.0, lat - 35.0);
+  let dLng = transformLng(lng - 105.0, lat - 35.0);
+  const radLat = lat / 180.0 * PI;
+  let magic = Math.sin(radLat);
+  magic = 1 - GCJ_EE * magic * magic;
+  const sqrtMagic = Math.sqrt(magic);
+  dLat = (dLat * 180.0) / ((GCJ_A * (1 - GCJ_EE)) / (magic * sqrtMagic) * PI);
+  dLng = (dLng * 180.0) / (GCJ_A / sqrtMagic * Math.cos(radLat) * PI);
+  return [lat + dLat, lng + dLng];
+}
+
+const HOTEL_GCJ = wgs84ToGcj02(HOTEL.lat || 25.2778, HOTEL.lng || 110.2917);
+const map = L.map('map', { center: HOTEL_GCJ, zoom: 12, zoomControl: false, attributionControl: true });
+L.control.zoom({ position: 'topright' }).addTo(map);
+L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+  subdomains: '1234', maxZoom: 18, attribution: '© 高德地图'
+}).addTo(map);
+
+/* ── Geolocation ── */
+const LocateControl = L.Control.extend({
+  options: { position: 'bottomright' },
+  onAdd() {
+    const btn = L.DomUtil.create('button', 'locate-btn');
+    btn.innerHTML = '📍';
+    btn.title = '我的位置';
+    L.DomEvent.disableClickPropagation(btn);
+    btn.addEventListener('click', () => {
+      btn.classList.add('active');
+      map.locate({ setView: true, maxZoom: 15 });
+    });
+    this._btn = btn;
+    return btn;
+  }
+});
+new LocateControl().addTo(map);
+let locMarker, locCircle;
+map.on('locationfound', e => {
+  const r = e.accuracy / 2;
+  if (locMarker) { locMarker.setLatLng(e.latlng); locCircle.setLatLng(e.latlng).setRadius(r); }
+  else {
+    locMarker = L.marker(e.latlng, {
+      icon: L.divIcon({ className:'', html:'<div style="width:14px;height:14px;border-radius:50%;background:#007aff;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,122,255,.5)"></div><div class="loc-pulse" style="position:absolute;top:0;left:0"></div>', iconSize:[14,14], iconAnchor:[7,7] }),
+      zIndexOffset: 2000
+    }).addTo(map);
+    locCircle = L.circle(e.latlng, { radius: r, color: '#007aff', fillColor: '#007aff', fillOpacity: .08, weight: 1 }).addTo(map);
+  }
+});
+map.on('locationerror', () => {});
+
+function icon(color, emoji) {
+  return L.divIcon({ className: '', html: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.18)">${emoji||''}</div>`, iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-16] });
+}
+
+if (HOTEL.lat) L.marker(HOTEL_GCJ, { icon: icon('#ff9500','🏨'), zIndexOffset: 1000 }).addTo(map).bindPopup(`<b>${HOTEL.name}</b>`);
+
+let markers = [], polylines = [];
+const emojis = { food:'🍽️', spot:'📍', hotel:'🏨', transport:'🚃', drink:'🍺' };
+
+function clearMap() { markers.forEach(m=>map.removeLayer(m)); polylines.forEach(p=>map.removeLayer(p)); markers=[]; polylines=[]; }
+
+function showDay(idx) {
+  clearMap();
+  if (idx === 0) {
+    const pts = [];
+    DAYS.forEach(d => d.locations.forEach(l => { if(l.lat) pts.push(wgs84ToGcj02(l.lat,l.lng)); }));
+    if(pts.length) map.fitBounds(pts, {padding:[30,30]});
+    DAYS.slice(1).forEach(d => {
+      d.locations.filter(l=>l.time!=='—').forEach(l => {
+        const m = L.circleMarker(wgs84ToGcj02(l.lat,l.lng), { radius:4, fillColor:d.color, color:'#fff', weight:1.5, fillOpacity:.9 }).addTo(map).bindPopup(`<b>${l.name}</b><br><span style="color:#86868b">${d.label}</span>`);
+        markers.push(m);
+      });
+    });
+    return;
+  }
+  const day = DAYS.find(d=>d.id===idx);
+  if(!day) return;
+  const coords = [];
+  day.locations.forEach(l => {
+    if(!l.lat) return;
+    const g = wgs84ToGcj02(l.lat,l.lng);
+    const m = L.marker(g, { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
+    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng})">📍 导航</a>${needsTaxi(l)?' · <a href="'+didiUrl(l.name,l.lat,l.lng)+'" target="_blank">🚕 打车</a>':''}${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
+    markers.push(m);
+    if(l.time!=='—') coords.push(g);
+  });
+  if(coords.length>1) { const pl = L.polyline(coords, { color:day.color, weight:2.5, opacity:.5, dashArray:'6,5' }).addTo(map); polylines.push(pl); }
+  if(coords.length) map.fitBounds(coords, { padding:[40,40], maxZoom:14 });
+}
+
+// ══════════ RENDER ══════════
+function payChips(pay) {
+  if(!pay) return '';
+  let h = '<div class="pays">';
+  const m = { cash:'💴', card:'💳', suica:'Suica', paypay:'PayPay', alipay:'支付宝', wechat:'微信' };
+  for(const [k,label] of Object.entries(m)) {
+    if(pay[k]!==undefined) { const c = pay[k]===1?'ok':pay[k]===0.5?'idk':'no'; h += `<span class="pay ${c}">${label}</span>`; }
+  }
+  return h+'</div>';
+}
+
+// ── 运行环境检测：在第三方 App 的 WebView 里，自定义 scheme 基本会被拦截 ──
+const IN_APP_WEBVIEW = (() => {
+  const ua = (navigator.userAgent || '').toLowerCase();
+  return /micromessenger|xhs|xhsdiscover|discover\/|tiktok|aweme|weibo|qq\/|qqbrowser|alipayclient|dingtalk|lark|feishu|ucbrowser|baiduboxapp|toutiao|newsarticle/.test(ua);
+})();
+
+function xhsKeyword(loc) {
+  if(loc.xhsKeyword) return loc.xhsKeyword.trim();
+  return (loc.name||'').replace(/⭐.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim();
+}
+function xhsAppUrl(loc) { return `xhsdiscover://search/result?keyword=${encodeURIComponent(xhsKeyword(loc))}&target_search=notes&source=deeplink`; }
+function xhsWebUrl(loc) { return `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(xhsKeyword(loc))}&source=web_explore_feed`; }
+
+function dpKeyword(loc) {
+  if(loc.dianpingKeyword) return loc.dianpingKeyword.trim();
+  return (loc.name||'').replace(/⭐.*$/g,'').replace(/（.*?）/g,'').replace(/\(.*?\)/g,'').replace(/\s+/g,' ').trim();
+}
+function dpAppUrl(loc) { return `dianping://searchshoplist?keyword=${encodeURIComponent(dpKeyword(loc))}`; }
+function dpWebUrl(loc) { return `https://m.dianping.com/searchshop?keyword=${encodeURIComponent(dpKeyword(loc))}`; }
+
+/* 去哪儿火车票 / 机票 / 酒店，以及滴滴打车 */
+function qunarTrainUrl(from, to, date) {
+  return `https://touch.qunar.com/h5/train/trainList?startStation=${encodeURIComponent(from)}&endStation=${encodeURIComponent(to)}&searchType=stasta&date=${date}&sort=3&wakeup=1`;
+}
+function qunarFlightUrl(from, to, date) {
+  return `https://touch.qunar.com/h5/flight/flightlist?depCity=${encodeURIComponent(from)}&arrCity=${encodeURIComponent(to)}&date=${date}`;
+}
+function didiUrl(name, lat, lng) {
+  return `https://common.diditaxi.com.cn/general/webEntry?maptype=wgs&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
+}
+function needsTaxi(loc) {
+  return /打车/.test((loc.desc || '') + (loc.detail || ''));
+}
+
+window._extLocs = {};
+DAYS.forEach(d => d.locations.forEach(l => { window._extLocs[`${d.id}::${l.name}`] = l; }));
+window._xhsLocs = window._extLocs;
+
+function openExt(key, kind) {
+  const loc = window._extLocs[key]; if(!loc) return false;
+  if (IN_APP_WEBVIEW) {
+    window.location.href = kind==='dp' ? dpWebUrl(loc) : xhsWebUrl(loc);
+  } else {
+    window.location.href = kind==='dp' ? dpAppUrl(loc) : xhsAppUrl(loc);
+  }
+  return false;
+}
+function openXhs(key) { return openExt(key, 'xhs'); }
+function openDp(key)  { return openExt(key, 'dp'); }
+
+function locCard(loc, dayIdx) {
+  const dot = loc.type==='food'?'food':loc.type==='spot'?'spot':loc.type==='drink'?'drink':loc.type==='hotel'?'hotel':'transport';
+  const bdg = loc.type==='food'?'<span class="badge food">餐</span>':loc.type==='spot'?'<span class="badge spot">景</span>':loc.type==='drink'?'<span class="badge drink">饮</span>':'';
+  const uid = `d${dayIdx}-${loc.name.replace(/\W/g,'')}`;
+  const locKey = `${dayIdx}::${loc.name}`;
+  let lnk = `<button class="btn nav" onclick="openAS('${loc.name.replace(/'/g,"\\'")}',${loc.lat},${loc.lng})">📍 导航</button>`;
+  if(needsTaxi(loc)) lnk += `<a href="${didiUrl(loc.name, loc.lat, loc.lng)}" target="_blank" class="btn taxi">🚕 打车</a>`;
+  if(loc.xhs||loc.xhsKeyword) {
+    const xhsHref = IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc);
+    const xhsLabel = IN_APP_WEBVIEW ? '📕 小红书' : '📕 小红书 App';
+    lnk += `<a href="${xhsHref}" onclick="return openXhs('${locKey.replace(/'/g,"\\'")}')" class="btn xhs">${xhsLabel}</a>`;
+  }
+  const dpEnabled = loc.dianping !== false &&
+    (loc.dianping || loc.dianpingKeyword || loc.type==='food' || loc.type==='drink');
+  if(dpEnabled) {
+    const dpHref = IN_APP_WEBVIEW ? dpWebUrl(loc) : dpAppUrl(loc);
+    const dpLabel = IN_APP_WEBVIEW ? '🍜 大众点评' : '🍜 大众点评 App';
+    lnk += `<a href="${dpHref}" onclick="return openDp('${locKey.replace(/'/g,"\\'")}')" class="btn dp">${dpLabel}</a>`;
+  }
+  if(loc.ticket) lnk += `<a href="${loc.ticket}" target="_blank" class="btn ticket">${loc.ticketLabel || '🎫 去哪儿买票'}</a>`;
+  if(loc.hotel) lnk += `<a href="${loc.hotel}" target="_blank" class="btn hotelbook">🏨 去哪儿订房</a>`;
+  if(loc.reserve) lnk += `<a href="${loc.reserve}" target="_blank" class="btn rsv">📅 携程预约</a>`;
+  if(loc.qunar) lnk += `<a href="${loc.qunar}" target="_blank" class="btn rsv">📅 去哪儿预约</a>`;
+  return `<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="card" onclick="if(!event.target.closest('.btn,.links'))toggle('${uid}')"><div class="time">${loc.time!=='—'?loc.time:'备选'}</div><div class="name">${bdg} ${loc.name}</div><div class="desc">${loc.desc}</div>${loc.budget?'<div class="budget">'+loc.budget+'</div>':''}${payChips(loc.pay)}<div class="links">${lnk}</div>${loc.detail?'<div class="details" id="'+uid+'">'+loc.detail.replace(/\n/g,'<br>')+'</div>':''}</div></div>`;
+}
+
+function renderDay(idx) {
+  const d = DAYS.find(x=>x.id===idx); if(!d) return '';
+  const main = d.locations.filter(l=>l.time!=='—');
+  const alt = d.locations.filter(l=>l.time==='—');
+  let h = `<div class="day-head"><h2>${d.title}</h2><p>${d.date}</p></div>`;
+  if(main.length) { h += '<div class="section-head">行程</div><div class="timeline">'; main.forEach(l => h += locCard(l, idx)); h += '</div>'; }
+  if(alt.length) { h += '<div class="section-head">备选</div><div class="timeline">'; alt.forEach(l => h += locCard(l, idx)); h += '</div>'; }
+  return h;
+}
+
+// ══════════ NAV ══════════
+let cur = 0;
+const tabsEl = document.getElementById('tabs');
+const contentEl = document.getElementById('content');
+
+DAYS.forEach(d => {
+  const btn = document.createElement('button');
+  btn.className = 'tab' + (d.id===0?' active':'');
+  btn.dataset.day = d.id;
+  btn.textContent = d.label;
+  tabsEl.appendChild(btn);
+});
+
+function go(idx) {
+  cur = idx;
+  tabsEl.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', +t.dataset.day===idx));
+  contentEl.innerHTML = idx===0 ? overviewContent() : renderDay(idx);
+  showDay(idx);
+  contentEl.scrollTo({top:0});
+  const tab = tabsEl.querySelector(`[data-day="${idx}"]`);
+  if(tab) tab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+}
+
+function toggle(id) { const el=document.getElementById(id); if(el) el.classList.toggle('closed'); }
+
+tabsEl.addEventListener('click', e => { const t=e.target.closest('.tab'); if(t) go(+t.dataset.day); });
+
+go(0);
+
+/* ── Action Sheet for Navigation ── */
+const asOverlay = document.createElement('div');
+asOverlay.className = 'as-overlay';
+asOverlay.innerHTML = `<div class="as-sheet">
+  <div class="as-group" id="as-opts"></div>
+  <div class="as-group"><button class="as-item as-cancel" onclick="closeAS()">取消</button></div>
+</div>`;
+document.body.appendChild(asOverlay);
+asOverlay.addEventListener('click', e => { if (e.target === asOverlay) closeAS(); });
+
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+function amapAppUrl(name, lat, lng) {
+  const scheme = IS_IOS ? 'iosamap' : 'androidamap';
+  return `${scheme}://viewMap?sourceApplication=trip&poiname=${encodeURIComponent(name)}&lat=${lat}&lon=${lng}&dev=0`;
+}
+function amapWebUrl(name, lat, lng) {
+  return `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(name)}&src=trip&coordinate=wgs84&callnative=1`;
+}
+function openAmap(name, lat, lng) {
+  if (IN_APP_WEBVIEW || !IS_MOBILE) { window.open(amapWebUrl(name, lat, lng)); return; }
+  const g = wgs84ToGcj02(lat, lng);
+  window.location.href = amapAppUrl(name, g[0], g[1]);
+}
+
+// 百度地图：链接使用 GCJ-02 坐标，coord_type=gcj02
+function baiduAppUrl(name, lat, lng) {
+  const g = wgs84ToGcj02(lat, lng);
+  return `baidumap://map/marker?location=${g[0]},${g[1]}&title=${encodeURIComponent(name)}&content=${encodeURIComponent(name)}&coord_type=gcj02&src=webapp.trip`;
+}
+function baiduWebUrl(name, lat, lng) {
+  const g = wgs84ToGcj02(lat, lng);
+  return `https://api.map.baidu.com/marker?location=${g[0]},${g[1]}&title=${encodeURIComponent(name)}&content=${encodeURIComponent(name)}&output=html&coord_type=gcj02&src=webapp.trip`;
+}
+function openBaidu(name, lat, lng) {
+  if (IN_APP_WEBVIEW || !IS_MOBILE) { window.open(baiduWebUrl(name, lat, lng)); return; }
+  window.location.href = baiduAppUrl(name, lat, lng);
+}
+
+function openAS(name, lat, lng) {
+  const safeName = name.replace(/'/g,"\\'");
+  document.getElementById('as-opts').innerHTML =
+    `<button class="as-item" onclick="openAmap('${safeName}',${lat},${lng});closeAS()">🧭 高德地图</button>` +
+    `<button class="as-item" onclick="openBaidu('${safeName}',${lat},${lng});closeAS()">🗺️ 百度地图</button>`;
+  asOverlay.classList.add('show');
+}
+function closeAS() { asOverlay.classList.remove('show'); }
+</script>
+</body>
+</html>
