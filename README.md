@@ -6,3 +6,7 @@
 - `攻略.md` — 完整行程、餐厅、预算和预订清单
 
 直接打开 `index.html` 即可使用；部署在 Vercel 上可手机访问。
+
+## 在线访问
+
+https://tujl126.github.io/guangxi-trip-2026/
