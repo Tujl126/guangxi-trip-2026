@@ -495,7 +495,7 @@ function qunarFlightUrl(from, to, date) {
 function didiUrl(name, lat, lng) {
   return `https://common.diditaxi.com.cn/general/webEntry?maptype=wgs&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
 }
-function didiScheme(name, lat, lng) {
+function didiUri(name, lat, lng) {
   const g = wgs84ToGcj02(lat, lng);
   return `diditaxi://?action=sendorder&dlat=${g[0]}&dlon=${g[1]}&dname=${encodeURIComponent(name)}`;
 }
@@ -503,11 +503,33 @@ function needsTaxi(loc) {
   return /打车/.test((loc.desc || '') + (loc.detail || ''));
 }
 
-/* 和小红书/百度地图一样：移动端直接 location.href = scheme，不自动跳网页 */
+/* 移动端优先打开原生 App；没有 App 或被浏览器拦截时再回退到网页。 */
 function launchApp(scheme, webUrl) {
   if (IN_APP_WEBVIEW) { window.location.href = webUrl; return; }
   if (!IS_MOBILE) { window.open(webUrl, '_blank'); return; }
-  window.location.href = scheme;
+  let leftPage = false;
+  const onVis = () => { if (document.hidden) leftPage = true; };
+  const onPageHide = () => { leftPage = true; };
+  document.addEventListener('visibilitychange', onVis);
+  window.addEventListener('pagehide', onPageHide, { once: true });
+  try {
+    window.location.href = scheme;
+  } catch (_) {
+    document.removeEventListener('visibilitychange', onVis);
+    window.removeEventListener('pagehide', onPageHide);
+    window.location.href = webUrl;
+    return;
+  }
+  window.setTimeout(() => {
+    document.removeEventListener('visibilitychange', onVis);
+    window.removeEventListener('pagehide', onPageHide);
+    if (!leftPage && !document.hidden) window.location.href = webUrl;
+  }, 1800);
+}
+function androidIntent(path, scheme, packageName, fallbackUrl) {
+  const cleanPath = String(path).replace(/^\/+/, '');
+  const fallback = fallbackUrl ? `;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)}` : '';
+  return `intent://${cleanPath}#Intent;scheme=${scheme};package=${packageName};action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE${fallback};end`;
 }
 function qunarBase() {
   return IS_IOS ? 'qunariphone' : 'qunaraphone';
@@ -515,7 +537,7 @@ function qunarBase() {
 function qunarHyUrl(webUrl) {
   const u = encodeURIComponent(webUrl);
   if (IS_ANDROID) {
-    return `intent://hy?isTransferHome=true&type=navibar-none&url=${u}#Intent;scheme=qunaraphone;package=com.Qunar;S.browser_fallback_url=${u};end`;
+    return androidIntent(`hy?isTransferHome=true&type=navibar-none&url=${u}`, 'qunaraphone', 'com.Qunar', webUrl);
   }
   return `${qunarBase()}://hy?isTransferHome=true&type=navibar-none&url=${u}`;
 }
@@ -532,45 +554,37 @@ function qunarHotelScheme(p) {
   });
   const path = `hotel/index?${qs.toString()}`;
   if (IS_ANDROID) {
-    const fallback = encodeURIComponent(qunarHotelUrl(p));
-    return `intent://${path}#Intent;scheme=qunaraphone;package=com.Qunar;S.browser_fallback_url=${fallback};end`;
+    return androidIntent(path, 'qunaraphone', 'com.Qunar', qunarHotelUrl(p));
   }
   return `${qunarBase()}://${path}`;
 }
 function openDidi(name, lat, lng) {
-  if (IN_APP_WEBVIEW) { window.location.href = didiUrl(name, lat, lng); return; }
-  if (!IS_MOBILE) { window.open(didiUrl(name, lat, lng), '_blank'); return; }
+  const web = didiUrl(name, lat, lng);
+  const uri = didiUri(name, lat, lng);
   if (IS_ANDROID) {
-    const fallback = encodeURIComponent(didiUrl(name, lat, lng));
-    window.location.href = `intent://open#Intent;scheme=diditaxi;package=com.sdu.didi.psnger;S.browser_fallback_url=${fallback};end`;
-    return;
+    const query = uri.slice(uri.indexOf('?') + 1);
+    launchApp(androidIntent(`?${query}`, 'diditaxi', 'com.sdu.didi.psnger', web), web);
+  } else {
+    launchApp(uri, web);
   }
-  let leftPage = false;
-  const onVis = () => { if (document.hidden) leftPage = true; };
-  document.addEventListener('visibilitychange', onVis);
-  window.location.href = didiScheme(name, lat, lng);
-  setTimeout(() => {
-    document.removeEventListener('visibilitychange', onVis);
-    if (!leftPage && !document.hidden) window.location.href = 'diditaxi://';
-  }, 1500);
 }
 function openQunar(webUrl) {
-  if (IN_APP_WEBVIEW) { window.location.href = webUrl; return; }
-  if (!IS_MOBILE) { window.open(webUrl, '_blank'); return; }
-  window.location.href = qunarHyUrl(webUrl);
+  launchApp(qunarHyUrl(webUrl), webUrl);
 }
 function open12306(arg) {
-  const [, , fromName, toName, fromCode, toCode, date] = (arg || '').split('|');
+  const [fromPinyin, toPinyin, fromName, toName, fromCode, toCode, date] = (arg || '').split('|');
   const web = `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(fromName)},${fromCode}&ts=${encodeURIComponent(toName)},${toCode}&date=${date}&flag=N,N,Y`;
-  if (!IS_MOBILE) { window.open(web, '_blank'); return; }
-  window.location.href = web;
+  const query = `from=${encodeURIComponent(fromPinyin)}&to=${encodeURIComponent(toPinyin)}&fromName=${encodeURIComponent(fromName)}&toName=${encodeURIComponent(toName)}&fromCode=${encodeURIComponent(fromCode)}&toCode=${encodeURIComponent(toCode)}&date=${encodeURIComponent(date)}`;
+  if (IS_ANDROID) {
+    launchApp(androidIntent(`ticket?${query}`, 'cn.12306', 'com.MobileTicket', web), web);
+  } else {
+    launchApp(`cn.12306://ticket?${query}`, web);
+  }
 }
 function openHotel(locKey) {
   const loc = window._extLocs[locKey]; if (!loc) return;
   if (!loc.hotelParams) { openQunar(loc.hotel); return; }
-  if (IN_APP_WEBVIEW) { window.location.href = qunarHotelUrl(loc.hotelParams); return; }
-  if (!IS_MOBILE) { window.open(qunarHotelUrl(loc.hotelParams), '_blank'); return; }
-  window.location.href = qunarHotelScheme(loc.hotelParams);
+  launchApp(qunarHotelScheme(loc.hotelParams), qunarHotelUrl(loc.hotelParams));
 }
 function openCtrip(webUrl) {
   launchApp('ctrip://homepage', webUrl);
