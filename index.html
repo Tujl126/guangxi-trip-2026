@@ -326,7 +326,8 @@ function overviewContent() {
 <div class="card" style="margin-bottom:10px"><div class="name">🛋️ 休闲版排法</div><div class="desc">每天最多 2 个主项目，删掉十里画廊、青秀山、涠洲岛；D3 睡到自然醒，D5 下午银滩发呆，D6 北海慢游。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🌧️ 天气变量</div><div class="desc">漓江游船、遇龙河竹筏遇大雨会停；停航就改高铁到阳朔/兴坪，或者在西街喝咖啡。返程机票仍订 15:00 后。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🎫 现在就订</div><div class="desc">10/25 高铁、10/26 漓江 + 遇龙河、10/27 阳朔→柳州、10/28 柳州→南宁、10/29 南宁→北海、10/31 返程机票、6 晚住宿。</div></div>
-<div class="card" style="margin-bottom:10px"><div class="name">🧳 去哪儿预订</div><div class="desc">高铁、机票、漓江游船和遇龙河竹筏都可以在去哪儿比价预订。<a href="https://www.qunar.com/" target="_blank">打开去哪儿 →</a></div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🧳 去哪儿预订</div><div class="desc">高铁、机票、漓江游船和遇龙河竹筏都可以在去哪儿比价预订。<a href="#" onclick="event.preventDefault();openQunar('https://www.qunar.com/')">打开去哪儿 App →</a></div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">📲 App 跳转提示</div><div class="desc">请用 Safari / Chrome 打开本页。微信/QQ 内置浏览器会拦截 App 跳转，只能打开网页版。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🍜 吃饭防坑</div><div class="desc">柳州螺蛳粉随便进老店都不差，不必死磕网红排队；阳朔啤酒鱼先问单价、当面称重；北海海鲜先问加工费。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🧥 穿衣</div><div class="desc">桂林/柳州早晚 15–18℃，带薄外套；北海白天 25–30℃，短袖 + 防晒。带雨具、拖鞋。</div></div>
 <div class="section-head">支付提醒</div>
@@ -444,7 +445,7 @@ function showDay(idx) {
     if(!l.lat) return;
     const g = wgs84ToGcj02(l.lat,l.lng);
     const m = L.marker(g, { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
-    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng})">📍 导航</a>${needsTaxi(l)?' · <a href="'+didiUrl(l.name,l.lat,l.lng)+'" target="_blank">🚕 打车</a>':''}${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
+    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng})">📍 导航</a>${didiLink(l)}${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
     markers.push(m);
     if(l.time!=='—') coords.push(g);
   });
@@ -493,8 +494,42 @@ function qunarFlightUrl(from, to, date) {
 function didiUrl(name, lat, lng) {
   return `https://common.diditaxi.com.cn/general/webEntry?maptype=wgs&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
 }
+function didiScheme(name, lat, lng) {
+  return `diditaxi://open?tolat=${lat}&tolng=${lng}&maptype=wgs&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
+}
 function needsTaxi(loc) {
   return /打车/.test((loc.desc || '') + (loc.detail || ''));
+}
+
+/* App 优先：能唤起 App 就唤起，未安装或桌面端再退回网页 */
+function qunarAppScheme() {
+  return IS_IOS ? 'qunariphone://' : 'qunaraphone://';
+}
+function launchApp(scheme, webUrl) {
+  if (IN_APP_WEBVIEW) { window.location.href = webUrl; return; }
+  if (!IS_MOBILE) { window.open(webUrl, '_blank'); return; }
+  let leftPage = false;
+  const onVis = () => { if (document.hidden) leftPage = true; };
+  document.addEventListener('visibilitychange', onVis);
+  window.location.href = scheme;
+  setTimeout(() => {
+    document.removeEventListener('visibilitychange', onVis);
+    if (!leftPage && !document.hidden) window.location.href = webUrl;
+  }, 2000);
+}
+function openDidi(name, lat, lng) {
+  launchApp(didiScheme(name, lat, lng), didiUrl(name, lat, lng));
+}
+function openQunar(webUrl) {
+  launchApp(qunarAppScheme(), webUrl);
+}
+function openCtrip(webUrl) {
+  launchApp('ctrip://homepage', webUrl);
+}
+function didiLink(loc) {
+  if (!needsTaxi(loc)) return '';
+  const safe = loc.name.replace(/'/g,"\\'");
+  return ` · <a href="#" onclick="event.preventDefault();openDidi('${safe}',${loc.lat},${loc.lng})">🚕 打车</a>`;
 }
 
 window._extLocs = {};
@@ -503,11 +538,9 @@ window._xhsLocs = window._extLocs;
 
 function openExt(key, kind) {
   const loc = window._extLocs[key]; if(!loc) return false;
-  if (IN_APP_WEBVIEW) {
-    window.location.href = kind==='dp' ? dpWebUrl(loc) : xhsWebUrl(loc);
-  } else {
-    window.location.href = kind==='dp' ? dpAppUrl(loc) : xhsAppUrl(loc);
-  }
+  const scheme = kind==='dp' ? dpAppUrl(loc) : xhsAppUrl(loc);
+  const web = kind==='dp' ? dpWebUrl(loc) : xhsWebUrl(loc);
+  launchApp(scheme, web);
   return false;
 }
 function openXhs(key) { return openExt(key, 'xhs'); }
@@ -518,8 +551,9 @@ function locCard(loc, dayIdx) {
   const bdg = loc.type==='food'?'<span class="badge food">餐</span>':loc.type==='spot'?'<span class="badge spot">景</span>':loc.type==='drink'?'<span class="badge drink">饮</span>':'';
   const uid = `d${dayIdx}-${loc.name.replace(/\W/g,'')}`;
   const locKey = `${dayIdx}::${loc.name}`;
-  let lnk = `<button class="btn nav" onclick="openAS('${loc.name.replace(/'/g,"\\'")}',${loc.lat},${loc.lng})">📍 导航</button>`;
-  if(needsTaxi(loc)) lnk += `<a href="${didiUrl(loc.name, loc.lat, loc.lng)}" target="_blank" class="btn taxi">🚕 打车</a>`;
+  const safeName = loc.name.replace(/'/g,"\\'");
+  let lnk = `<button class="btn nav" onclick="openAS('${safeName}',${loc.lat},${loc.lng})">📍 导航</button>`;
+  if(needsTaxi(loc)) lnk += `<button class="btn taxi" onclick="openDidi('${safeName}',${loc.lat},${loc.lng})">🚕 打车</button>`;
   if(loc.xhs||loc.xhsKeyword) {
     const xhsHref = IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc);
     const xhsLabel = IN_APP_WEBVIEW ? '📕 小红书' : '📕 小红书 App';
@@ -532,10 +566,10 @@ function locCard(loc, dayIdx) {
     const dpLabel = IN_APP_WEBVIEW ? '🍜 大众点评' : '🍜 大众点评 App';
     lnk += `<a href="${dpHref}" onclick="return openDp('${locKey.replace(/'/g,"\\'")}')" class="btn dp">${dpLabel}</a>`;
   }
-  if(loc.ticket) lnk += `<a href="${loc.ticket}" target="_blank" class="btn ticket">${loc.ticketLabel || '🎫 去哪儿买票'}</a>`;
-  if(loc.hotel) lnk += `<a href="${loc.hotel}" target="_blank" class="btn hotelbook">🏨 去哪儿订房</a>`;
-  if(loc.reserve) lnk += `<a href="${loc.reserve}" target="_blank" class="btn rsv">📅 携程预约</a>`;
-  if(loc.qunar) lnk += `<a href="${loc.qunar}" target="_blank" class="btn rsv">📅 去哪儿预约</a>`;
+  if(loc.ticket) lnk += `<button class="btn ticket" onclick="openQunar('${loc.ticket}')">${loc.ticketLabel || '🎫 去哪儿买票'}</button>`;
+  if(loc.hotel) lnk += `<button class="btn hotelbook" onclick="openQunar('${loc.hotel}')">🏨 去哪儿订房</button>`;
+  if(loc.reserve) lnk += `<button class="btn rsv" onclick="openCtrip('${loc.reserve}')">📅 携程预约</button>`;
+  if(loc.qunar) lnk += `<button class="btn rsv" onclick="openQunar('${loc.qunar}')">📅 去哪儿预约</button>`;
   return `<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="card" onclick="if(!event.target.closest('.btn,.links'))toggle('${uid}')"><div class="time">${loc.time!=='—'?loc.time:'备选'}</div><div class="name">${bdg} ${loc.name}</div><div class="desc">${loc.desc}</div>${loc.budget?'<div class="budget">'+loc.budget+'</div>':''}${payChips(loc.pay)}<div class="links">${lnk}</div>${loc.detail?'<div class="details" id="'+uid+'">'+loc.detail.replace(/\n/g,'<br>')+'</div>':''}</div></div>`;
 }
 
@@ -598,9 +632,8 @@ function amapWebUrl(name, lat, lng) {
   return `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(name)}&src=trip&coordinate=wgs84&callnative=1`;
 }
 function openAmap(name, lat, lng) {
-  if (IN_APP_WEBVIEW || !IS_MOBILE) { window.open(amapWebUrl(name, lat, lng)); return; }
   const g = wgs84ToGcj02(lat, lng);
-  window.location.href = amapAppUrl(name, g[0], g[1]);
+  launchApp(amapAppUrl(name, g[0], g[1]), amapWebUrl(name, lat, lng));
 }
 
 // 百度地图：链接使用 GCJ-02 坐标，coord_type=gcj02
@@ -613,8 +646,7 @@ function baiduWebUrl(name, lat, lng) {
   return `https://api.map.baidu.com/marker?location=${g[0]},${g[1]}&title=${encodeURIComponent(name)}&content=${encodeURIComponent(name)}&output=html&coord_type=gcj02&src=webapp.trip`;
 }
 function openBaidu(name, lat, lng) {
-  if (IN_APP_WEBVIEW || !IS_MOBILE) { window.open(baiduWebUrl(name, lat, lng)); return; }
-  window.location.href = baiduAppUrl(name, lat, lng);
+  launchApp(baiduAppUrl(name, lat, lng), baiduWebUrl(name, lat, lng));
 }
 
 function openAS(name, lat, lng) {
