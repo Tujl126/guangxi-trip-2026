@@ -246,7 +246,7 @@ const HOTEL = { name: '桂林中心广场（住宿区域）', lat: 25.2778, lng:
 const DAYS = [
   { id: 0, label: '总览', color: '#0071e3', locations: [] },
   { id: 1, label: 'D1', date: '10/25 周日', title: '南昌 → 桂林', color: '#ff9500', locations: [
-    { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', ticket: qunarTrainUrl('南昌西','桂林北','2026-10-25'), ticket12306: 'nanchangxi|guilinbei|南昌西|桂林北|NXG|GBZ|2026-10-25' },
+    { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', train: { from: '南昌西', to: '桂林北', date: '2026-10-25' }, ticket12306: 'nanchangxi|guilinbei|南昌西|桂林北|NXG|GBZ|2026-10-25' },
     { name: '桂林北站', lat: 25.3374, lng: 110.2886, type: 'transport', time: '17:23', desc: '到站后打车到中心广场约 25–30 分钟，¥30 左右。', gmap: '桂林北站' },
     { name: '住宿：桂林中心广场', lat: 25.2778, lng: 110.2917, type: 'hotel', time: '18:20', desc: '住东西巷/中心广场一带，步行可到正阳步行街。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'桂林', cityUrl:'guilin', keyword:'桂林中心广场', fromDate:'2026-10-25', toDate:'2026-10-26' } },
     { name: '又益轩米粉', lat: 25.2801, lng: 110.2949, type: 'food', time: '19:00', desc: '解放西路百年老店，招牌马肉米粉。先干拌后加汤，人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '桂林 又益轩 马肉米粉', dianpingKeyword: '又益轩 桂林' },
@@ -266,7 +266,7 @@ const DAYS = [
   ]},
   { id: 3, label: 'D3', date: '10/27 周二', title: '阳朔 → 柳州', color: '#af52de', locations: [
     { name: '西街早午餐', lat: 24.7776, lng: 110.4912, type: 'food', time: '10:30', desc: '睡到自然醒，吃碗米粉或早午餐，再慢慢退房。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '阳朔 西街 早午餐', dianpingKeyword: '西街 阳朔 早午餐' },
-    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', ticket: qunarTrainUrl('阳朔','柳州','2026-10-27'), ticket12306: 'yangshuo|liuzhou|阳朔|柳州|YCZ|LZZ|2026-10-27' },
+    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', train: { from: '阳朔', to: '柳州', date: '2026-10-27' }, ticket12306: 'yangshuo|liuzhou|阳朔|柳州|YCZ|LZZ|2026-10-27' },
     { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '16:30', desc: 'G3876 14:57–16:30，二等座约 ¥80。打车到五星街约 15 分钟。', gmap: '柳州站' },
     { name: '住宿：柳州五星步行街', lat: 24.3138, lng: 109.4100, type: 'hotel', time: '17:20', desc: '住五星街/柳江边，吃螺蛳粉和逛窑埠都方便。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'柳州', cityUrl:'liuzhou', keyword:'柳州五星步行街', fromDate:'2026-10-27', toDate:'2026-10-28' } },
     { name: '聚宝螺蛳粉', lat: 24.3164, lng: 109.4068, type: 'food', time: '18:10', desc: '柳州老牌螺蛳粉，汤底浓、酸辣正。人均 ¥15–20；饭点排队，错峰去。', budget: '¥15–20', xhsKeyword: '柳州 聚宝螺蛳粉', dianpingKeyword: '聚宝螺蛳粉 柳州' },
@@ -276,7 +276,7 @@ const DAYS = [
   { id: 4, label: 'D4', date: '10/28 周三', title: '柳州 → 南宁', color: '#34c759', locations: [
     { name: '西环肥仔螺蛳粉', lat: 24.3154, lng: 109.4039, type: 'food', time: '08:30', desc: '24 小时营业，红油香而不呛，可免费续粉。人均 ¥15–22。', budget: '¥15–22', xhsKeyword: '柳州 西环肥仔螺蛳粉', dianpingKeyword: '西环肥仔 螺蛳粉' },
     { name: '龙潭公园', lat: 24.2860, lng: 109.4101, type: 'spot', time: '09:40', desc: '免费，喀斯特山水 + 风雨桥，走 1.5 小时刚好。不想走路可换水上公交（¥3）。', gmap: '龙潭公园 柳州' },
-    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', ticket: qunarTrainUrl('柳州','南宁东','2026-10-28'), ticket12306: 'liuzhou|nanningdong|柳州|南宁东|LZZ|NFZ|2026-10-28' },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', train: { from: '柳州', to: '南宁东', date: '2026-10-28' }, ticket12306: 'liuzhou|nanningdong|柳州|南宁东|LZZ|NFZ|2026-10-28' },
     { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '14:10', desc: '地铁 1 号线到朝阳广场，约 25 分钟。', gmap: '南宁东站' },
     { name: '住宿：南宁朝阳广场', lat: 22.8196, lng: 108.3170, type: 'hotel', time: '14:40', desc: '先午休，傍晚再出门。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'南宁', cityUrl:'nanning', keyword:'南宁朝阳广场', fromDate:'2026-10-28', toDate:'2026-10-29' } },
     { name: '三街两巷', lat: 22.8169, lng: 108.3159, type: 'spot', time: '17:30', desc: '南宁老城骑楼街区，城隍庙、漓江书院。免费，慢慢逛 1 小时。', gmap: '三街两巷 南宁' },
@@ -284,7 +284,7 @@ const DAYS = [
   ]},
   { id: 5, label: 'D5', date: '10/29 周四', title: '南宁 → 北海', color: '#30b0c7', locations: [
     { name: '南宁早午餐', lat: 22.8190, lng: 108.3180, type: 'food', time: '10:00', desc: '睡到自然醒，找家老友粉或卷粉慢慢吃。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '南宁 老友粉 推荐', dianpingKeyword: '老友粉 南宁' },
-    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', ticket: qunarTrainUrl('南宁东','北海','2026-10-29'), ticket12306: 'nanningdong|beihai|南宁东|北海|NFZ|BHZ|2026-10-29' },
+    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', train: { from: '南宁东', to: '北海', date: '2026-10-29' }, ticket12306: 'nanningdong|beihai|南宁东|北海|NFZ|BHZ|2026-10-29' },
     { name: '北海站', lat: 21.4654, lng: 109.1150, type: 'transport', time: '13:40', desc: '打车到侨港约 10 分钟。', gmap: '北海站' },
     { name: '住宿：北海侨港', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '14:10', desc: '连住两晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-10-29', toDate:'2026-10-31' } },
     { name: '银滩', lat: 21.4070, lng: 109.1513, type: 'spot', time: '15:30', desc: '免费。下午不赶行程，踩水、坐着看海，想躺多久躺多久。', gmap: '北海银滩' },
@@ -486,8 +486,44 @@ function dpAppUrl(loc) { return `dianping://searchshoplist?keyword=${encodeURICo
 function dpWebUrl(loc) { return `https://m.dianping.com/searchshop?keyword=${encodeURIComponent(dpKeyword(loc))}`; }
 
 /* 去哪儿火车票 / 机票 / 酒店，以及滴滴打车 */
-function qunarTrainUrl(from, to, date) {
-  return `https://touch.qunar.com/h5/train/trainList?startStation=${encodeURIComponent(from)}&endStation=${encodeURIComponent(to)}&searchType=stasta&date=${date}&sort=3&wakeup=1`;
+function qunarTrainScheme(t, fallbackUrl) {
+  // 去哪儿 App 原生火车票查询页 TrainGrandTrafficView（train_rn）
+  // 参数结构对照 App 首页点“搜索”时传给 trainBigTrafficList 的 param
+  const param = {
+    dep: t.from,
+    depDisplay: t.from,
+    arr: t.to,
+    arrDisplay: t.to,
+    date: t.date,
+    dptSuggestSource: 0,
+    depType: -1,
+    arrSuggestSource: 0,
+    arrType: -1,
+    arrivalAreaId: '',
+    departureAreaId: '',
+    arrivalStationType: -1,
+    departureStationType: -1,
+    isNewUser: false,
+    suggestSceneLinkId: '',
+    fromPage: 'TrainHomeView',
+    cat: '',
+    qunarAccountInfo: {},
+    searchFromAi: false,
+    ipLocationCity: '',
+    isOnlyGaotieDongche: false,
+    isStudentSearch: false
+  };
+  const initProps = encodeURIComponent(JSON.stringify({
+    param,
+    isOnlyGaotieDongche: false,
+    isStudentSearch: false
+  }));
+  const path = `react/open?hybridId=train_rn&pageName=TrainGrandTrafficView&initProps=${initProps}`;
+  const fallback = fallbackUrl || 'https://m.qunar.com/';
+  if (IS_ANDROID) {
+    return androidIntent(path, 'qunaraphone', 'com.Qunar', fallback);
+  }
+  return `${qunarBase()}://${path}`;
 }
 function qunarFlightUrl(from, to, date) {
   return `https://touch.qunar.com/h5/flight/flightlist?depCity=${encodeURIComponent(from)}&arrCity=${encodeURIComponent(to)}&date=${date}`;
@@ -535,11 +571,13 @@ function qunarBase() {
   return IS_IOS ? 'qunariphone' : 'qunaraphone';
 }
 function qunarHyUrl(webUrl) {
+  // 去哪儿 App 自己的 H5 跳转格式：hy?type=navibar-none&url=...
   const u = encodeURIComponent(webUrl);
+  const path = `hy?type=navibar-none&url=${u}`;
   if (IS_ANDROID) {
-    return androidIntent(`hy?isTransferHome=true&type=navibar-none&url=${u}`, 'qunaraphone', 'com.Qunar', webUrl);
+    return androidIntent(path, 'qunaraphone', 'com.Qunar', webUrl);
   }
-  return `${qunarBase()}://hy?isTransferHome=true&type=navibar-none&url=${u}`;
+  return `${qunarBase()}://${path}`;
 }
 function qunarHotelUrl(p) {
   return `https://hotel.qunar.com/cn/${p.cityUrl}/q-${encodeURIComponent(p.keyword)}?fromDate=${p.fromDate}&toDate=${p.toDate}&cityName=${encodeURIComponent(p.cityName)}`;
@@ -571,15 +609,34 @@ function openDidi(name, lat, lng) {
 function openQunar(webUrl) {
   launchApp(qunarHyUrl(webUrl), webUrl);
 }
-function open12306(arg) {
-  const [fromPinyin, toPinyin, fromName, toName, fromCode, toCode, date] = (arg || '').split('|');
-  const web = `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(fromName)},${fromCode}&ts=${encodeURIComponent(toName)},${toCode}&date=${date}&flag=N,N,Y`;
-  const query = `from=${encodeURIComponent(fromPinyin)}&to=${encodeURIComponent(toPinyin)}&fromName=${encodeURIComponent(fromName)}&toName=${encodeURIComponent(toName)}&fromCode=${encodeURIComponent(fromCode)}&toCode=${encodeURIComponent(toCode)}&date=${encodeURIComponent(date)}`;
-  if (IS_ANDROID) {
-    launchApp(androidIntent(`ticket?${query}`, 'cn.12306', 'com.MobileTicket', web), web);
-  } else {
-    launchApp(`cn.12306://ticket?${query}`, web);
-  }
+function openTrain(locKey) {
+  const loc = window._extLocs[locKey]; if (!loc || !loc.train) return;
+  const fallback = IS_MOBILE ? 'https://m.qunar.com/' : 'https://train.qunar.com/';
+  launchApp(qunarTrainScheme(loc.train, fallback), fallback);
+}
+/* 12306 官方 App 没有公开的「带参数直达查询页」scheme。
+   cn.12306://ticket?... 不是有效路由，会让 App 卡在空白页，
+   所以这里改成让用户二选一：网页查询（已填好）或打开 App 首页。 */
+function parse12306(arg) {
+  const parts = (arg || '').split('|');
+  const fromName = parts[2] || '', toName = parts[3] || '';
+  const fromCode = parts[4] || '', toCode = parts[5] || '', date = parts[6] || '';
+  return `https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc&fs=${encodeURIComponent(fromName)},${fromCode}&ts=${encodeURIComponent(toName)},${toCode}&date=${date}&flag=N,N,Y`;
+}
+function openWeb(webUrl) {
+  if (IS_MOBILE) window.location.href = webUrl;
+  else window.open(webUrl, '_blank');
+}
+function open12306Menu(locKey) {
+  const loc = window._extLocs[locKey]; if (!loc || !loc.ticket12306) return;
+  const web = parse12306(loc.ticket12306);
+  showSheet([
+    { label: '🌐 网页查询（条件已填好）', onSelect: () => openWeb(web) },
+    { label: '📱 打开 12306 App（首页）', onSelect: () => {
+        if (IS_MOBILE) launchApp('cn.12306://', web);
+        else openWeb('https://www.12306.cn/');
+      } }
+  ]);
 }
 function openHotel(locKey) {
   const loc = window._extLocs[locKey]; if (!loc) return;
@@ -614,6 +671,7 @@ function locCard(loc, dayIdx) {
   const bdg = loc.type==='food'?'<span class="badge food">餐</span>':loc.type==='spot'?'<span class="badge spot">景</span>':loc.type==='drink'?'<span class="badge drink">饮</span>':'';
   const uid = `d${dayIdx}-${loc.name.replace(/\W/g,'')}`;
   const locKey = `${dayIdx}::${loc.name}`;
+  const safeKey = locKey.replace(/'/g,"\\'");
   const safeName = loc.name.replace(/'/g,"\\'");
   let lnk = `<button class="btn nav" onclick="openAS('${safeName}',${loc.lat},${loc.lng})">📍 导航</button>`;
   if(needsTaxi(loc)) lnk += `<button class="btn taxi" onclick="openDidi('${safeName}',${loc.lat},${loc.lng})">🚕 打车</button>`;
@@ -629,8 +687,9 @@ function locCard(loc, dayIdx) {
     const dpLabel = IN_APP_WEBVIEW ? '🍜 大众点评' : '🍜 大众点评 App';
     lnk += `<a href="${dpHref}" onclick="return openDp('${locKey.replace(/'/g,"\\'")}')" class="btn dp">${dpLabel}</a>`;
   }
+  if(loc.train) lnk += `<button class="btn ticket" onclick="openTrain('${safeKey}')">🎫 去哪儿买票</button>`;
   if(loc.ticket) lnk += `<button class="btn ticket" onclick="openQunar('${loc.ticket}')">${loc.ticketLabel || '🎫 去哪儿买票'}</button>`;
-  if(loc.ticket12306) lnk += `<button class="btn ticket12306" onclick="open12306('${loc.ticket12306}')">🎫 12306 买票</button>`;
+  if(loc.ticket12306) lnk += `<button class="btn ticket12306" onclick="open12306Menu('${safeKey}')">🎫 12306 买票</button>`;
   if(loc.hotel) lnk += `<button class="btn hotelbook" onclick="openHotel('${locKey}')">🏨 去哪儿订房</button>`;
   if(loc.reserve) lnk += `<button class="btn rsv" onclick="openCtrip('${loc.reserve}')">📅 携程预约</button>`;
   if(loc.qunar) lnk += `<button class="btn rsv" onclick="openQunar('${loc.qunar}')">📅 去哪儿预约</button>`;
@@ -714,12 +773,25 @@ function openBaidu(name, lat, lng) {
   launchApp(baiduAppUrl(name, lat, lng), baiduWebUrl(name, lat, lng));
 }
 
-function openAS(name, lat, lng) {
-  const safeName = name.replace(/'/g,"\\'");
-  document.getElementById('as-opts').innerHTML =
-    `<button class="as-item" onclick="openAmap('${safeName}',${lat},${lng});closeAS()">🧭 高德地图</button>` +
-    `<button class="as-item" onclick="openBaidu('${safeName}',${lat},${lng});closeAS()">🗺️ 百度地图</button>`;
+function showSheet(items) {
+  const opts = document.getElementById('as-opts');
+  opts.innerHTML = items.map((it, i) =>
+    `<button class="as-item" data-sheet="${i}">${it.label}</button>`).join('');
+  opts.onclick = e => {
+    const btn = e.target.closest('[data-sheet]');
+    if (!btn) return;
+    const item = items[+btn.dataset.sheet];
+    closeAS();
+    if (item && item.onSelect) item.onSelect();
+  };
   asOverlay.classList.add('show');
+}
+
+function openAS(name, lat, lng) {
+  showSheet([
+    { label: '🧭 高德地图', onSelect: () => openAmap(name, lat, lng) },
+    { label: '🗺️ 百度地图', onSelect: () => openBaidu(name, lat, lng) }
+  ]);
 }
 function closeAS() { asOverlay.classList.remove('show'); }
 </script>
