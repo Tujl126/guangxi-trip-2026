@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>广西四城 7 天 · 桂林 → 柳州 → 南宁 → 北海｜2026.10.25–10.31</title>
+<title>广西四城 7 天 · 桂林 → 柳州 → 南宁 → 北海｜2026.10.29–11.04</title>
 <meta name="description" content="两人广西 7 天休闲行程：桂林、阳朔、柳州、南宁、北海。高铁 + 动车 + 航班，含螺蛳粉、每天怎么走和预算。">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -244,61 +244,61 @@ const HOTEL = { name: '桂林中心广场（住宿区域）', lat: 25.2778, lng:
 
 const DAYS = [
   { id: 0, label: '总览', color: '#0071e3', locations: [] },
-  { id: 1, label: 'D1', date: '10/25 周日', title: '南昌 → 桂林', color: '#ff9500', locations: [
-    { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', train: { from: '南昌西', to: '桂林北', date: '2026-10-25' } },
+  { id: 1, label: 'D1', date: '10/29 周四', title: '南昌 → 桂林', color: '#ff9500', locations: [
+    { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', train: { from: '南昌西', to: '桂林北', date: '2026-10-29' } },
     { name: '桂林北站', lat: 25.3374, lng: 110.2886, type: 'transport', time: '17:23', desc: '到站后打车到中心广场约 25–30 分钟，¥30 左右。', gmap: '桂林北站', taxi: { lat: 25.32927, lng: 110.30186 }, taxiTo: { name: '桂林中心广场', lat: 25.275033, lng: 110.295961 } },
-    { name: '住宿：桂林中心广场', lat: 25.2778, lng: 110.2917, type: 'hotel', time: '18:20', desc: '住东西巷/中心广场一带，步行可到正阳步行街。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'桂林', cityUrl:'guilin', keyword:'桂林中心广场', fromDate:'2026-10-25', toDate:'2026-10-26' } },
+    { name: '住宿：桂林中心广场', lat: 25.2778, lng: 110.2917, type: 'hotel', time: '18:20', desc: '住东西巷/中心广场一带，步行可到正阳步行街。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'桂林', cityUrl:'guilin', keyword:'桂林中心广场', fromDate:'2026-10-29', toDate:'2026-10-30' } },
     { name: '又益轩米粉', lat: 25.2801, lng: 110.2949, type: 'food', time: '19:00', desc: '解放西路百年老店，招牌马肉米粉。先干拌后加汤，人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '桂林 又益轩 马肉米粉', dianpingKeyword: '又益轩 桂林' },
     { name: '东西巷', lat: 25.2816, lng: 110.2945, type: 'spot', time: '20:00', desc: '桂林老街区，青砖灰瓦，晚上亮灯好拍。免费。', gmap: '东西巷 桂林', xhsKeyword: '桂林 东西巷 攻略' },
     { name: '正阳步行街', lat: 25.2796, lng: 110.2937, type: 'spot', time: '20:40', desc: '桂林最热闹的步行街，小吃补给点。免费。', gmap: '正阳步行街 桂林', xhsKeyword: '桂林 正阳步行街 美食' },
     { name: '日月双塔夜景', lat: 25.2741, lng: 110.2902, type: 'spot', time: '21:10', desc: '两江四湖边，金银双塔亮灯。沿湖散步免费，不必买游船票。', gmap: '日月双塔 桂林', xhsKeyword: '桂林 日月双塔 夜景' }
   ]},
-  { id: 2, label: 'D2', date: '10/26 周一', title: '漓江 → 阳朔 · 遇龙河', color: '#007aff', locations: [
+  { id: 2, label: 'D2', date: '10/30 周五', title: '漓江 → 阳朔 · 遇龙河', color: '#007aff', locations: [
     { name: '磨盘山码头', lat: 25.1506, lng: 110.4269, type: 'transport', time: '07:40', desc: '从市区打车约 30–40 分钟，¥40–50。提前取票、安检。', gmap: '磨盘山码头 桂林', taxi: { lat: 25.146957, lng: 110.432884 } },
     { name: '漓江精华段游船', lat: 25.0500, lng: 110.4400, type: 'spot', time: '08:30', desc: '磨盘山 → 阳朔龙头山，约 4 小时。三星船 ¥215/人，坐着看九马画山、黄布倒影。', budget: '¥215', qunarSight: { id: '1224538966', name: '漓江三星游船' }, xhsKeyword: '漓江游船 三星船 攻略' },
     { name: '阳朔龙头山码头', lat: 24.7740, lng: 110.4960, type: 'transport', time: '12:30', desc: '下船即到阳朔县城，步行/打车去西街。', gmap: '龙头山码头 阳朔', taxi: { lat: 24.784488, lng: 110.501552 }, taxiTo: { name: '阳朔西街', lat: 24.77403, lng: 110.493702 } },
-    { name: '住宿：阳朔西街', lat: 24.7782, lng: 110.4906, type: 'hotel', time: '13:40', desc: '放下行李，午休 20 分钟再出发。参考 ¥180–260/间。', budget: '¥180–260/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'阳朔', cityUrl:'yangshuo', keyword:'阳朔西街', fromDate:'2026-10-26', toDate:'2026-10-27' } },
+    { name: '住宿：阳朔西街', lat: 24.7782, lng: 110.4906, type: 'hotel', time: '13:40', desc: '放下行李，午休 20 分钟再出发。参考 ¥180–260/间。', budget: '¥180–260/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'阳朔', cityUrl:'yangshuo', keyword:'阳朔西街', fromDate:'2026-10-30', toDate:'2026-10-31' } },
     { name: '金龙桥码头（遇龙河竹筏）', lat: 24.8189, lng: 110.3887, type: 'spot', time: '14:50', desc: '竹筏约 15:00 开漂，金龙桥 → 旧县约 90 分钟、过 9 个堤坝。双人筏约 ¥320。', budget: '¥160/人', qunarSight: { id: '1943772129', name: '遇龙河竹筏漂游' }, xhsKeyword: '遇龙河竹筏 金龙桥 旧县 攻略' },
     { name: '旧县码头', lat: 24.8075, lng: 110.4105, type: 'transport', time: '16:30', desc: '下筏后回西街约 15–20 分钟，不赶时间。', gmap: '旧县码头 阳朔' },
     { name: '彭大姐啤酒鱼', lat: 24.7775, lng: 110.4920, type: 'food', time: '18:30', desc: '点套餐或明码标价，点鱼前确认单价 + 当面称重。人均 ¥60–100。', budget: '¥60–100', xhsKeyword: '阳朔 啤酒鱼 防坑', dianpingKeyword: '彭大姐啤酒鱼 阳朔' },
     { name: '西街夜逛', lat: 24.7778, lng: 110.4910, type: 'spot', time: '20:30', desc: '阳朔最热闹的街，酒吧和小店集中。随便逛，累了就回。', gmap: '西街 阳朔', xhsKeyword: '阳朔 西街 攻略' }
   ]},
-  { id: 3, label: 'D3', date: '10/27 周二', title: '阳朔 → 柳州', color: '#af52de', locations: [
+  { id: 3, label: 'D3', date: '10/31 周六', title: '阳朔 → 柳州', color: '#af52de', locations: [
     { name: '西街早午餐', lat: 24.7776, lng: 110.4912, type: 'food', time: '10:30', desc: '睡到自然醒，吃碗米粉或早午餐，再慢慢退房。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '阳朔 西街 早午餐', dianpingKeyword: '西街 阳朔 早午餐' },
-    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', taxi: { lat: 24.959981, lng: 110.568085 }, train: { from: '阳朔', to: '柳州', date: '2026-10-27' } },
+    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', taxi: { lat: 24.959981, lng: 110.568085 }, train: { from: '阳朔', to: '柳州', date: '2026-10-31' } },
     { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '16:30', desc: 'G3876 14:57–16:30，二等座约 ¥80。打车到五星街约 15 分钟。', gmap: '柳州站', taxi: { lat: 24.30746, lng: 109.38871 }, taxiTo: { name: '五星步行街', lat: 24.310112, lng: 109.413078 } },
-    { name: '住宿：柳州五星步行街', lat: 24.3138, lng: 109.4100, type: 'hotel', time: '17:20', desc: '住五星街/柳江边，吃螺蛳粉和逛窑埠都方便。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'柳州', cityUrl:'liuzhou', keyword:'柳州五星步行街', fromDate:'2026-10-27', toDate:'2026-10-28' } },
+    { name: '住宿：柳州五星步行街', lat: 24.3138, lng: 109.4100, type: 'hotel', time: '17:20', desc: '住五星街/柳江边，吃螺蛳粉和逛窑埠都方便。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'柳州', cityUrl:'liuzhou', keyword:'柳州五星步行街', fromDate:'2026-10-31', toDate:'2026-11-01' } },
     { name: '聚宝螺蛳粉', lat: 24.3164, lng: 109.4068, type: 'food', time: '18:10', desc: '柳州老牌螺蛳粉，汤底浓、酸辣正。人均 ¥15–20；饭点排队，错峰去。', budget: '¥15–20', xhsKeyword: '柳州 聚宝螺蛳粉', dianpingKeyword: '聚宝螺蛳粉 柳州' },
     { name: '窑埠古镇', lat: 24.3185, lng: 109.4232, type: 'spot', time: '19:15', desc: '柳江边仿古街区，18:00 后亮灯，夜景最好看。免费。', gmap: '窑埠古镇 柳州', xhsKeyword: '柳州 窑埠古镇 夜景' },
     { name: '柳江音乐喷泉', lat: 24.3088, lng: 109.4135, type: 'spot', time: '20:00', desc: '滨江东路江边，20:00 / 21:00 各一场，约 15 分钟，免费（场次以现场公告为准）。', gmap: '柳江音乐喷泉 柳州', xhsKeyword: '柳州 柳江音乐喷泉 时间' }
   ]},
-  { id: 4, label: 'D4', date: '10/28 周三', title: '柳州 → 南宁', color: '#34c759', locations: [
+  { id: 4, label: 'D4', date: '11/01 周日', title: '柳州 → 南宁', color: '#34c759', locations: [
     { name: '西环肥仔螺蛳粉', lat: 24.3154, lng: 109.4039, type: 'food', time: '08:30', desc: '24 小时营业，红油香而不呛，可免费续粉。人均 ¥15–22。', budget: '¥15–22', xhsKeyword: '柳州 西环肥仔螺蛳粉', dianpingKeyword: '西环肥仔 螺蛳粉' },
     { name: '龙潭公园', lat: 24.2860, lng: 109.4101, type: 'spot', time: '09:40', desc: '免费，喀斯特山水 + 风雨桥，走 1.5 小时刚好。不想走路可换水上公交（¥3）。', gmap: '龙潭公园 柳州', xhsKeyword: '柳州 龙潭公园 攻略' },
-    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', taxi: { lat: 24.30746, lng: 109.38871 }, train: { from: '柳州', to: '南宁东', date: '2026-10-28' } },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', taxi: { lat: 24.30746, lng: 109.38871 }, train: { from: '柳州', to: '南宁东', date: '2026-11-01' } },
     { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '14:10', desc: '地铁 1 号线到朝阳广场，约 25 分钟。', gmap: '南宁东站' },
-    { name: '住宿：南宁朝阳广场', lat: 22.8196, lng: 108.3170, type: 'hotel', time: '14:40', desc: '先午休，傍晚再出门。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'南宁', cityUrl:'nanning', keyword:'南宁朝阳广场', fromDate:'2026-10-28', toDate:'2026-10-29' } },
+    { name: '住宿：南宁朝阳广场', lat: 22.8196, lng: 108.3170, type: 'hotel', time: '14:40', desc: '先午休，傍晚再出门。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'南宁', cityUrl:'nanning', keyword:'南宁朝阳广场', fromDate:'2026-11-01', toDate:'2026-11-02' } },
     { name: '三街两巷', lat: 22.8169, lng: 108.3159, type: 'spot', time: '17:30', desc: '南宁老城骑楼街区，城隍庙、漓江书院。免费，慢慢逛 1 小时。', gmap: '三街两巷 南宁', xhsKeyword: '南宁 三街两巷 攻略' },
     { name: '复记老友粉（中山路）', lat: 22.8100, lng: 108.3200, type: 'food', time: '19:00', desc: '30 多年老店，老友猪杂粉，人均 ¥13–15。夜市继续吃烧烤、酸嘢、糖水。', budget: '¥13–15', xhsKeyword: '南宁 复记老友粉 中山路', dianpingKeyword: '复记老友 中山路' }
   ]},
-  { id: 5, label: 'D5', date: '10/29 周四', title: '南宁 → 北海', color: '#30b0c7', locations: [
+  { id: 5, label: 'D5', date: '11/02 周一', title: '南宁 → 北海', color: '#30b0c7', locations: [
     { name: '南宁早午餐', lat: 22.8190, lng: 108.3180, type: 'food', time: '10:00', desc: '睡到自然醒，找家老友粉或卷粉慢慢吃。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '南宁 老友粉 推荐', dianpingKeyword: '老友粉 南宁' },
-    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', train: { from: '南宁东', to: '北海', date: '2026-10-29' } },
+    { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', train: { from: '南宁东', to: '北海', date: '2026-11-02' } },
     { name: '北海站', lat: 21.4654, lng: 109.1150, type: 'transport', time: '13:40', desc: '打车到侨港约 10 分钟。', gmap: '北海站', taxi: { lat: 21.45288, lng: 109.12814 }, taxiTo: { name: '侨港风情街', lat: 21.425187, lng: 109.125051 } },
-    { name: '住宿：北海侨港', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '14:10', desc: '连住两晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-10-29', toDate:'2026-10-31' } },
+    { name: '住宿：北海侨港', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '14:10', desc: '连住两晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-11-02', toDate:'2026-11-04' } },
     { name: '银滩', lat: 21.4070, lng: 109.1513, type: 'spot', time: '15:30', desc: '免费。下午不赶行程，踩水、坐着看海，想躺多久躺多久。', gmap: '北海银滩', xhsKeyword: '北海 银滩 攻略' },
     { name: '侨港风情街', lat: 21.4277, lng: 109.1206, type: 'spot', time: '18:00', desc: '北海最集中的小吃街，海鲜大排档 + 糖水。', gmap: '侨港风情街 北海', xhsKeyword: '北海 侨港风情街 美食' },
     { name: '24栋糖水', lat: 21.4282, lng: 109.1212, type: 'food', time: '18:30', desc: '五加糖水、板栗桂圆，¥6–12。隔壁有间冰室炒冰 ¥10–15。', budget: '¥10–20', xhsKeyword: '北海 侨港 24栋糖水', dianpingKeyword: '24栋糖水 北海' }
   ]},
-  { id: 6, label: 'D6', date: '10/30 周五', title: '北海慢游', color: '#ff2d55', locations: [
+  { id: 6, label: 'D6', date: '11/03 周二', title: '北海慢游', color: '#ff2d55', locations: [
     { name: '侨港早餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '09:00', desc: '蟹仔粉、卷粉、虾饼，慢慢吃。人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '北海 侨港 早餐 蟹仔粉', dianpingKeyword: '侨港 早餐 北海' },
     { name: '北海老街', lat: 21.4864, lng: 109.1137, type: 'spot', time: '10:00', desc: '骑楼老街，虾饼、海鲜粥、糖水。免费，逛 1.5 小时。', gmap: '北海老街', xhsKeyword: '北海老街 攻略' },
     { name: '侨港午餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '12:00', desc: '回侨港吃海鲜或越南卷粉，人均 ¥50–80。', budget: '¥50–80', xhsKeyword: '北海 侨港 海鲜 推荐', dianpingKeyword: '侨港 海鲜 北海' },
     { name: '冠头岭', lat: 21.4590, lng: 109.0610, type: 'spot', time: '15:30', desc: '北海西端海岸，免费。走栈道、看海，傍晚等日落。', gmap: '冠头岭 北海', xhsKeyword: '北海 冠头岭 日落' },
     { name: '侨港晚餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '18:30', desc: '最后一顿海鲜：先问单价和加工费。人均 ¥60–100。', budget: '¥60–100', xhsKeyword: '北海 侨港 海鲜 防坑', dianpingKeyword: '侨港 海鲜 北海' },
-    { name: '住宿：北海侨港（连住）', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '20:00', desc: '连住第二晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-10-30', toDate:'2026-10-31' } }
+    { name: '住宿：北海侨港（连住）', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '20:00', desc: '连住第二晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-11-03', toDate:'2026-11-04' } }
   ]},
-  { id: 7, label: 'D7', date: '10/31 周六', title: '北海 → 南昌', color: '#8e8e93', locations: [
+  { id: 7, label: 'D7', date: '11/04 周三', title: '北海 → 南昌', color: '#8e8e93', locations: [
     { name: '侨港早餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '08:30', desc: '蟹仔粉、卷粉、虾饼。人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '北海 侨港 早餐 蟹仔粉', dianpingKeyword: '侨港 早餐 北海' },
     { name: '北海老街', lat: 21.4864, lng: 109.1137, type: 'spot', time: '10:00', desc: '补拍、买手信，别逛太晚。', gmap: '北海老街', xhsKeyword: '北海老街 攻略' },
     { name: '北海福成机场', lat: 21.5394, lng: 109.2939, type: 'transport', time: '12:30', desc: '打车过去约 30 分钟（¥50–70）。优先订 15:00 后的直飞南昌航班。', gmap: '北海福成机场', taxi: { lat: 21.536419, lng: 109.29609 } },
@@ -312,7 +312,7 @@ const DAYS = [
 
 function overviewContent() {
   return `
-<div class="hero"><h1>广西四城 7 天</h1><p class="subtitle">桂林 → 柳州 → 南宁 → 北海 · 2026.10.25–10.31 · 两人 · 人均约 ¥3,000–3,200</p></div>
+<div class="hero"><h1>广西四城 7 天</h1><p class="subtitle">桂林 → 柳州 → 南宁 → 北海 · 2026.10.29–11.04 · 两人 · 人均约 ¥3,000–3,200</p></div>
 <div class="info-grid">
   <div class="info-card"><div class="label">住宿</div><div class="value">桂林 1 晚 · 阳朔 1 晚<br>柳州 1 晚 · 南宁 1 晚<br>北海 2 晚</div></div>
   <div class="info-card"><div class="label">交通</div><div class="value">高铁 + 动车 + 航班<br>返程：北海或南宁飞南昌</div></div>
@@ -325,7 +325,7 @@ function overviewContent() {
 <div class="card" style="margin-bottom:10px"><div class="name">🍜 柳州只做三件事</div><div class="desc">吃螺蛳粉（聚宝 / 西环肥仔）、逛窑埠古镇、看柳江音乐喷泉。不排龙潭大环线，睡醒再出门。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🛋️ 休闲版排法</div><div class="desc">每天最多 2 个主项目，删掉十里画廊、青秀山、涠洲岛；D3 睡到自然醒，D5 下午银滩发呆，D6 北海慢游。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🌧️ 天气变量</div><div class="desc">漓江游船、遇龙河竹筏遇大雨会停；停航就改高铁到阳朔/兴坪，或者在西街喝咖啡。返程机票仍订 15:00 后。</div></div>
-<div class="card" style="margin-bottom:10px"><div class="name">🎫 现在就订</div><div class="desc">10/25 高铁、10/26 漓江 + 遇龙河、10/27 阳朔→柳州、10/28 柳州→南宁、10/29 南宁→北海、10/31 返程机票、6 晚住宿。</div></div>
+<div class="card" style="margin-bottom:10px"><div class="name">🎫 现在就订</div><div class="desc">10/29 高铁、10/30 漓江 + 遇龙河、10/31 阳朔→柳州、11/01 柳州→南宁、11/02 南宁→北海、11/04 返程机票、6 晚住宿。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🧳 去哪儿预订</div><div class="desc">高铁、机票、漓江游船和遇龙河竹筏都可以在去哪儿比价预订。<a href="#" onclick="event.preventDefault();openQunar('https://www.qunar.com/')">打开去哪儿 App →</a></div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">📲 App 跳转提示</div><div class="desc">移动端点一下直接唤起 App，不会自动跳网页。请用 Safari / Chrome 打开本页；微信/QQ 内置浏览器会拦截 App 跳转。</div></div>
 <div class="card" style="margin-bottom:10px"><div class="name">🍜 吃饭防坑</div><div class="desc">柳州螺蛳粉随便进老店都不差，不必死磕网红排队；阳朔啤酒鱼先问单价、当面称重；北海海鲜先问加工费。</div></div>
