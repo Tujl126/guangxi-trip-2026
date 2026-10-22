@@ -256,10 +256,10 @@ const DAYS = [
   ]},
   { id: 2, label: 'D2', date: '10/26 周一', title: '漓江 → 阳朔 · 遇龙河', color: '#007aff', locations: [
     { name: '磨盘山码头', lat: 25.1506, lng: 110.4269, type: 'transport', time: '07:40', desc: '从市区打车约 30–40 分钟，¥40–50。提前取票、安检。', gmap: '磨盘山码头 桂林' },
-    { name: '漓江精华段游船', lat: 25.0500, lng: 110.4400, type: 'spot', time: '08:30', desc: '磨盘山 → 阳朔龙头山，约 4 小时。三星船 ¥215/人，坐着看九马画山、黄布倒影。', budget: '¥215', reserve: 'https://www.ctrip.com', qunar: 'https://piao.qunar.com/ticket/list.htm?keyword=' + encodeURIComponent('漓江游船'), xhsKeyword: '漓江游船 三星船 攻略' },
+    { name: '漓江精华段游船', lat: 25.0500, lng: 110.4400, type: 'spot', time: '08:30', desc: '磨盘山 → 阳朔龙头山，约 4 小时。三星船 ¥215/人，坐着看九马画山、黄布倒影。', budget: '¥215', reserve: 'https://www.ctrip.com', qunarSight: '漓江游船', xhsKeyword: '漓江游船 三星船 攻略' },
     { name: '阳朔龙头山码头', lat: 24.7740, lng: 110.4960, type: 'transport', time: '12:30', desc: '下船即到阳朔县城，步行/打车去西街。', gmap: '龙头山码头 阳朔' },
     { name: '住宿：阳朔西街', lat: 24.7782, lng: 110.4906, type: 'hotel', time: '13:40', desc: '放下行李，午休 20 分钟再出发。参考 ¥180–260/间。', budget: '¥180–260/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'阳朔', cityUrl:'yangshuo', keyword:'阳朔西街', fromDate:'2026-10-26', toDate:'2026-10-27' } },
-    { name: '金龙桥码头（遇龙河竹筏）', lat: 24.8189, lng: 110.3887, type: 'spot', time: '14:50', desc: '竹筏约 15:00 开漂，金龙桥 → 旧县约 90 分钟、过 9 个堤坝。双人筏约 ¥320。', budget: '¥160/人', reserve: 'https://www.ctrip.com', qunar: 'https://piao.qunar.com/ticket/list.htm?keyword=' + encodeURIComponent('遇龙河竹筏'), xhsKeyword: '遇龙河竹筏 金龙桥 旧县 攻略' },
+    { name: '金龙桥码头（遇龙河竹筏）', lat: 24.8189, lng: 110.3887, type: 'spot', time: '14:50', desc: '竹筏约 15:00 开漂，金龙桥 → 旧县约 90 分钟、过 9 个堤坝。双人筏约 ¥320。', budget: '¥160/人', reserve: 'https://www.ctrip.com', qunarSight: '遇龙河竹筏', xhsKeyword: '遇龙河竹筏 金龙桥 旧县 攻略' },
     { name: '旧县码头', lat: 24.8075, lng: 110.4105, type: 'transport', time: '16:30', desc: '下筏后回西街约 15–20 分钟，不赶时间。', gmap: '旧县码头 阳朔' },
     { name: '彭大姐啤酒鱼', lat: 24.7775, lng: 110.4920, type: 'food', time: '18:30', desc: '点套餐或明码标价，点鱼前确认单价 + 当面称重。人均 ¥60–100。', budget: '¥60–100', xhsKeyword: '阳朔 啤酒鱼 防坑', dianpingKeyword: '彭大姐啤酒鱼 阳朔' },
     { name: '西街夜逛', lat: 24.7778, lng: 110.4910, type: 'spot', time: '20:30', desc: '阳朔最热闹的街，酒吧和小店集中。随便逛，累了就回。', gmap: '西街 阳朔' }
@@ -609,6 +609,21 @@ function openDidi(name, lat, lng) {
 function openQunar(webUrl) {
   launchApp(qunarHyUrl(webUrl), webUrl);
 }
+function qunarSightScheme(keyword, fallbackUrl) {
+  // 去哪儿 App 原生门票搜索页 sight/searchList（门票 H5 页面自己也是用这个路由唤起 App）
+  const kw = encodeURIComponent(keyword);
+  const path = `sight/searchList?keyword=${kw}`;
+  const fallback = fallbackUrl || 'https://touch.piao.qunar.com/';
+  if (IS_ANDROID) {
+    return androidIntent(path, 'qunaraphone', 'com.Qunar', fallback);
+  }
+  return `${qunarBase()}://${path}`;
+}
+function openQunarSight(locKey) {
+  const loc = window._extLocs[locKey]; if (!loc || !loc.qunarSight) return;
+  const web = `https://touch.piao.qunar.com/touch/list.htm?keyword=${encodeURIComponent(loc.qunarSight)}`;
+  launchApp(qunarSightScheme(loc.qunarSight, web), web);
+}
 function openTrain(locKey) {
   const loc = window._extLocs[locKey]; if (!loc || !loc.train) return;
   const fallback = IS_MOBILE ? 'https://m.qunar.com/' : 'https://train.qunar.com/';
@@ -692,6 +707,7 @@ function locCard(loc, dayIdx) {
   if(loc.ticket12306) lnk += `<button class="btn ticket12306" onclick="open12306Menu('${safeKey}')">🎫 12306 买票</button>`;
   if(loc.hotel) lnk += `<button class="btn hotelbook" onclick="openHotel('${locKey}')">🏨 去哪儿订房</button>`;
   if(loc.reserve) lnk += `<button class="btn rsv" onclick="openCtrip('${loc.reserve}')">📅 携程预约</button>`;
+  if(loc.qunarSight) lnk += `<button class="btn rsv" onclick="openQunarSight('${safeKey}')">📅 去哪儿预约</button>`;
   if(loc.qunar) lnk += `<button class="btn rsv" onclick="openQunar('${loc.qunar}')">📅 去哪儿预约</button>`;
   return `<div class="tl-item"><div class="tl-dot ${dot}"></div><div class="card" onclick="if(!event.target.closest('.btn,.links'))toggle('${uid}')"><div class="time">${loc.time!=='—'?loc.time:'备选'}</div><div class="name">${bdg} ${loc.name}</div><div class="desc">${loc.desc}</div>${loc.budget?'<div class="budget">'+loc.budget+'</div>':''}${payChips(loc.pay)}<div class="links">${lnk}</div>${loc.detail?'<div class="details" id="'+uid+'">'+loc.detail.replace(/\n/g,'<br>')+'</div>':''}</div></div>`;
 }
