@@ -528,11 +528,19 @@ function didiWebEntry(name, lat, lng) {
   // 滴滴官方网页叫车入口，带目的地后打开就是「呼叫快车」页
   return `https://common.diditaxi.com.cn/general/webEntry?maptype=wgs&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
 }
-function didiOnetravelUrl(webUrl) {
-  // 滴滴 App 现在的主 scheme 是 onetravel；router/page/web 会在 App 内打开网页
-  const path = `router/page/web?url=${encodeURIComponent(webUrl)}`;
+function didiOnetravelUrl(name, lat, lng, fallbackUrl) {
+  // 滴滴 App 原生确认页：entrance_v2 读取 tolat/tolng 后反解终点并直接跳到确认页
+  const qs = new URLSearchParams({
+    sid: 'dache_anycar',
+    bussinessId: '666',
+    tolat: String(lat),
+    tolng: String(lng),
+    maptype: 'wgs',
+    q: name
+  });
+  const path = `dache_anycar/entrance_v2?${qs.toString()}`;
   if (IS_ANDROID) {
-    return androidIntent(path, 'onetravel', 'com.sdu.didi.psnger', webUrl);
+    return androidIntent(path, 'onetravel', 'com.sdu.didi.psnger', fallbackUrl);
   }
   return `onetravel://${path}`;
 }
@@ -599,7 +607,7 @@ function qunarHotelScheme(p) {
 }
 function openDidi(name, lat, lng) {
   const web = didiWebEntry(name, lat, lng);
-  launchApp(didiOnetravelUrl(web), web);
+  launchApp(didiOnetravelUrl(name, lat, lng, web), web);
 }
 function openQunar(webUrl) {
   launchApp(qunarHyUrl(webUrl), webUrl);
