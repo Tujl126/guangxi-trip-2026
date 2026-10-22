@@ -246,7 +246,7 @@ const DAYS = [
   { id: 0, label: '总览', color: '#0071e3', locations: [] },
   { id: 1, label: 'D1', date: '10/25 周日', title: '南昌 → 桂林', color: '#ff9500', locations: [
     { name: '南昌西站', lat: 28.6268, lng: 115.7985, type: 'transport', time: '12:31', desc: 'G1505 12:31 发车，二等座约 ¥365。提前 40 分钟到站。', gmap: '南昌西站', train: { from: '南昌西', to: '桂林北', date: '2026-10-25' } },
-    { name: '桂林北站', lat: 25.3374, lng: 110.2886, type: 'transport', time: '17:23', desc: '到站后打车到中心广场约 25–30 分钟，¥30 左右。', gmap: '桂林北站' },
+    { name: '桂林北站', lat: 25.3374, lng: 110.2886, type: 'transport', time: '17:23', desc: '到站后打车到中心广场约 25–30 分钟，¥30 左右。', gmap: '桂林北站', taxi: { lat: 25.32927, lng: 110.30186 } },
     { name: '住宿：桂林中心广场', lat: 25.2778, lng: 110.2917, type: 'hotel', time: '18:20', desc: '住东西巷/中心广场一带，步行可到正阳步行街。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'桂林', cityUrl:'guilin', keyword:'桂林中心广场', fromDate:'2026-10-25', toDate:'2026-10-26' } },
     { name: '又益轩米粉', lat: 25.2801, lng: 110.2949, type: 'food', time: '19:00', desc: '解放西路百年老店，招牌马肉米粉。先干拌后加汤，人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '桂林 又益轩 马肉米粉', dianpingKeyword: '又益轩 桂林' },
     { name: '东西巷', lat: 25.2816, lng: 110.2945, type: 'spot', time: '20:00', desc: '桂林老街区，青砖灰瓦，晚上亮灯好拍。免费。', gmap: '东西巷 桂林', xhsKeyword: '桂林 东西巷 攻略' },
@@ -254,9 +254,9 @@ const DAYS = [
     { name: '日月双塔夜景', lat: 25.2741, lng: 110.2902, type: 'spot', time: '21:10', desc: '两江四湖边，金银双塔亮灯。沿湖散步免费，不必买游船票。', gmap: '日月双塔 桂林', xhsKeyword: '桂林 日月双塔 夜景' }
   ]},
   { id: 2, label: 'D2', date: '10/26 周一', title: '漓江 → 阳朔 · 遇龙河', color: '#007aff', locations: [
-    { name: '磨盘山码头', lat: 25.1506, lng: 110.4269, type: 'transport', time: '07:40', desc: '从市区打车约 30–40 分钟，¥40–50。提前取票、安检。', gmap: '磨盘山码头 桂林' },
+    { name: '磨盘山码头', lat: 25.1506, lng: 110.4269, type: 'transport', time: '07:40', desc: '从市区打车约 30–40 分钟，¥40–50。提前取票、安检。', gmap: '磨盘山码头 桂林', taxi: { lat: 25.146957, lng: 110.432884 } },
     { name: '漓江精华段游船', lat: 25.0500, lng: 110.4400, type: 'spot', time: '08:30', desc: '磨盘山 → 阳朔龙头山，约 4 小时。三星船 ¥215/人，坐着看九马画山、黄布倒影。', budget: '¥215', qunarSight: { id: '1224538966', name: '漓江三星游船' }, xhsKeyword: '漓江游船 三星船 攻略' },
-    { name: '阳朔龙头山码头', lat: 24.7740, lng: 110.4960, type: 'transport', time: '12:30', desc: '下船即到阳朔县城，步行/打车去西街。', gmap: '龙头山码头 阳朔' },
+    { name: '阳朔龙头山码头', lat: 24.7740, lng: 110.4960, type: 'transport', time: '12:30', desc: '下船即到阳朔县城，步行/打车去西街。', gmap: '龙头山码头 阳朔', taxi: { lat: 24.784488, lng: 110.501552 } },
     { name: '住宿：阳朔西街', lat: 24.7782, lng: 110.4906, type: 'hotel', time: '13:40', desc: '放下行李，午休 20 分钟再出发。参考 ¥180–260/间。', budget: '¥180–260/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'阳朔', cityUrl:'yangshuo', keyword:'阳朔西街', fromDate:'2026-10-26', toDate:'2026-10-27' } },
     { name: '金龙桥码头（遇龙河竹筏）', lat: 24.8189, lng: 110.3887, type: 'spot', time: '14:50', desc: '竹筏约 15:00 开漂，金龙桥 → 旧县约 90 分钟、过 9 个堤坝。双人筏约 ¥320。', budget: '¥160/人', qunarSight: { id: '1943772129', name: '遇龙河竹筏漂游' }, xhsKeyword: '遇龙河竹筏 金龙桥 旧县 攻略' },
     { name: '旧县码头', lat: 24.8075, lng: 110.4105, type: 'transport', time: '16:30', desc: '下筏后回西街约 15–20 分钟，不赶时间。', gmap: '旧县码头 阳朔' },
@@ -265,8 +265,8 @@ const DAYS = [
   ]},
   { id: 3, label: 'D3', date: '10/27 周二', title: '阳朔 → 柳州', color: '#af52de', locations: [
     { name: '西街早午餐', lat: 24.7776, lng: 110.4912, type: 'food', time: '10:30', desc: '睡到自然醒，吃碗米粉或早午餐，再慢慢退房。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '阳朔 西街 早午餐', dianpingKeyword: '西街 阳朔 早午餐' },
-    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', train: { from: '阳朔', to: '柳州', date: '2026-10-27' } },
-    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '16:30', desc: 'G3876 14:57–16:30，二等座约 ¥80。打车到五星街约 15 分钟。', gmap: '柳州站' },
+    { name: '阳朔站', lat: 24.9633, lng: 110.5635, type: 'transport', time: '13:10', desc: '注意：车站在兴坪，不在县城。打车约 40 分钟，¥100–120。乘 14:57 G3876 去柳州。', gmap: '阳朔站', taxi: { lat: 24.959981, lng: 110.568085 }, train: { from: '阳朔', to: '柳州', date: '2026-10-27' } },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '16:30', desc: 'G3876 14:57–16:30，二等座约 ¥80。打车到五星街约 15 分钟。', gmap: '柳州站', taxi: { lat: 24.30746, lng: 109.38871 } },
     { name: '住宿：柳州五星步行街', lat: 24.3138, lng: 109.4100, type: 'hotel', time: '17:20', desc: '住五星街/柳江边，吃螺蛳粉和逛窑埠都方便。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'柳州', cityUrl:'liuzhou', keyword:'柳州五星步行街', fromDate:'2026-10-27', toDate:'2026-10-28' } },
     { name: '聚宝螺蛳粉', lat: 24.3164, lng: 109.4068, type: 'food', time: '18:10', desc: '柳州老牌螺蛳粉，汤底浓、酸辣正。人均 ¥15–20；饭点排队，错峰去。', budget: '¥15–20', xhsKeyword: '柳州 聚宝螺蛳粉', dianpingKeyword: '聚宝螺蛳粉 柳州' },
     { name: '窑埠古镇', lat: 24.3185, lng: 109.4232, type: 'spot', time: '19:15', desc: '柳江边仿古街区，18:00 后亮灯，夜景最好看。免费。', gmap: '窑埠古镇 柳州', xhsKeyword: '柳州 窑埠古镇 夜景' },
@@ -275,7 +275,7 @@ const DAYS = [
   { id: 4, label: 'D4', date: '10/28 周三', title: '柳州 → 南宁', color: '#34c759', locations: [
     { name: '西环肥仔螺蛳粉', lat: 24.3154, lng: 109.4039, type: 'food', time: '08:30', desc: '24 小时营业，红油香而不呛，可免费续粉。人均 ¥15–22。', budget: '¥15–22', xhsKeyword: '柳州 西环肥仔螺蛳粉', dianpingKeyword: '西环肥仔 螺蛳粉' },
     { name: '龙潭公园', lat: 24.2860, lng: 109.4101, type: 'spot', time: '09:40', desc: '免费，喀斯特山水 + 风雨桥，走 1.5 小时刚好。不想走路可换水上公交（¥3）。', gmap: '龙潭公园 柳州', xhsKeyword: '柳州 龙潭公园 攻略' },
-    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', train: { from: '柳州', to: '南宁东', date: '2026-10-28' } },
+    { name: '柳州站', lat: 24.3106, lng: 109.3833, type: 'transport', time: '12:30', desc: '乘 13:00 左右动车去南宁东，约 1 小时 10 分，二等座 ¥52–99。', gmap: '柳州站', taxi: { lat: 24.30746, lng: 109.38871 }, train: { from: '柳州', to: '南宁东', date: '2026-10-28' } },
     { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '14:10', desc: '地铁 1 号线到朝阳广场，约 25 分钟。', gmap: '南宁东站' },
     { name: '住宿：南宁朝阳广场', lat: 22.8196, lng: 108.3170, type: 'hotel', time: '14:40', desc: '先午休，傍晚再出门。参考 ¥150–200/间。', budget: '¥150–200/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'南宁', cityUrl:'nanning', keyword:'南宁朝阳广场', fromDate:'2026-10-28', toDate:'2026-10-29' } },
     { name: '三街两巷', lat: 22.8169, lng: 108.3159, type: 'spot', time: '17:30', desc: '南宁老城骑楼街区，城隍庙、漓江书院。免费，慢慢逛 1 小时。', gmap: '三街两巷 南宁', xhsKeyword: '南宁 三街两巷 攻略' },
@@ -284,7 +284,7 @@ const DAYS = [
   { id: 5, label: 'D5', date: '10/29 周四', title: '南宁 → 北海', color: '#30b0c7', locations: [
     { name: '南宁早午餐', lat: 22.8190, lng: 108.3180, type: 'food', time: '10:00', desc: '睡到自然醒，找家老友粉或卷粉慢慢吃。人均 ¥15–30。', budget: '¥15–30', xhsKeyword: '南宁 老友粉 推荐', dianpingKeyword: '老友粉 南宁' },
     { name: '南宁东站', lat: 22.8406, lng: 108.4099, type: 'transport', time: '12:30', desc: '乘动车去北海，约 1 小时 10 分，二等座 ¥73–87。', gmap: '南宁东站', train: { from: '南宁东', to: '北海', date: '2026-10-29' } },
-    { name: '北海站', lat: 21.4654, lng: 109.1150, type: 'transport', time: '13:40', desc: '打车到侨港约 10 分钟。', gmap: '北海站' },
+    { name: '北海站', lat: 21.4654, lng: 109.1150, type: 'transport', time: '13:40', desc: '打车到侨港约 10 分钟。', gmap: '北海站', taxi: { lat: 21.45288, lng: 109.12814 } },
     { name: '住宿：北海侨港', lat: 21.4277, lng: 109.1206, type: 'hotel', time: '14:10', desc: '连住两晚，不折腾。参考 ¥160–220/间。', budget: '¥160–220/晚', hotel: 'https://hotel.qunar.com/', hotelParams: { cityName:'北海', cityUrl:'beihai', keyword:'北海侨港', fromDate:'2026-10-29', toDate:'2026-10-31' } },
     { name: '银滩', lat: 21.4070, lng: 109.1513, type: 'spot', time: '15:30', desc: '免费。下午不赶行程，踩水、坐着看海，想躺多久躺多久。', gmap: '北海银滩', xhsKeyword: '北海 银滩 攻略' },
     { name: '侨港风情街', lat: 21.4277, lng: 109.1206, type: 'spot', time: '18:00', desc: '北海最集中的小吃街，海鲜大排档 + 糖水。', gmap: '侨港风情街 北海', xhsKeyword: '北海 侨港风情街 美食' },
@@ -301,7 +301,7 @@ const DAYS = [
   { id: 7, label: 'D7', date: '10/31 周六', title: '北海 → 南昌', color: '#8e8e93', locations: [
     { name: '侨港早餐', lat: 21.4277, lng: 109.1206, type: 'food', time: '08:30', desc: '蟹仔粉、卷粉、虾饼。人均 ¥15–25。', budget: '¥15–25', xhsKeyword: '北海 侨港 早餐 蟹仔粉', dianpingKeyword: '侨港 早餐 北海' },
     { name: '北海老街', lat: 21.4864, lng: 109.1137, type: 'spot', time: '10:00', desc: '补拍、买手信，别逛太晚。', gmap: '北海老街', xhsKeyword: '北海老街 攻略' },
-    { name: '北海福成机场', lat: 21.5394, lng: 109.2939, type: 'transport', time: '12:30', desc: '打车过去约 30 分钟（¥50–70）。优先订 15:00 后的直飞南昌航班。', gmap: '北海福成机场' },
+    { name: '北海福成机场', lat: 21.5394, lng: 109.2939, type: 'transport', time: '12:30', desc: '打车过去约 30 分钟（¥50–70）。优先订 15:00 后的直飞南昌航班。', gmap: '北海福成机场', taxi: { lat: 21.536419, lng: 109.29609 } },
     { name: '南昌昌北机场', lat: 28.8650, lng: 115.9000, type: 'transport', time: '15:30', desc: '若没有北海直飞，改走北海→南宁东动车 + 南宁吴圩机场飞南昌。', gmap: '南昌昌北机场' }
   ]}
 ];
@@ -445,7 +445,7 @@ function showDay(idx) {
     if(!l.lat) return;
     const g = wgs84ToGcj02(l.lat,l.lng);
     const m = L.marker(g, { icon: icon(day.color, emojis[l.type]||'📌') }).addTo(map);
-    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng})">📍 导航</a>${didiLink(l)}${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
+    m.bindPopup(`<b>${l.name}</b>${l.time!=='—'?'<br><span style="color:#86868b">'+l.time+'</span>':''}<br>${l.desc}${l.budget?'<br><span style="color:#ff9500">'+l.budget+'</span>':''}<br><a href="#" onclick="event.preventDefault();openAS('${l.name.replace(/'/g,"\\'")}',${l.lat},${l.lng})">📍 导航</a>${didiLink(l, day.id)}${l.xhs?' · <a href="'+l.xhs+'" target="_blank">📕 小红书</a>':''}`);
     markers.push(m);
     if(l.time!=='—') coords.push(g);
   });
@@ -525,17 +525,17 @@ function qunarTrainScheme(t, fallbackUrl) {
   return `${qunarBase()}://${path}`;
 }
 function didiWebEntry(name, lat, lng) {
-  // 滴滴官方网页叫车入口，带目的地后打开就是「呼叫快车」页
-  return `https://common.diditaxi.com.cn/general/webEntry?maptype=wgs&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
+  // 滴滴官方网页叫车入口；lat/lng 为 GCJ-02，对应 maptype=soso
+  return `https://common.diditaxi.com.cn/general/webEntry?maptype=soso&tolat=${lat}&tolng=${lng}&toname=${encodeURIComponent(name)}&toaddr=${encodeURIComponent(name)}`;
 }
 function didiOnetravelUrl(name, lat, lng, fallbackUrl) {
-  // 滴滴 App 原生发单确认页：/sendorder 会读取 tolat/tolng 后反解终点并直接跳到确认页
+  // 滴滴 App 原生发单确认页：/sendorder 读取 GCJ-02 的 tolat/tolng 后反解终点并跳到确认页
   const qs = new URLSearchParams({
     sid: 'dache_anycar',
     bussinessId: '666',
     tolat: String(lat),
     tolng: String(lng),
-    maptype: 'wgs',
+    maptype: 'soso',
     q: name
   });
   const path = `dache_anycar/sendorder?${qs.toString()}`;
@@ -605,9 +605,15 @@ function qunarHotelScheme(p) {
   }
   return `${qunarBase()}://${path}`;
 }
-function openDidi(name, lat, lng) {
-  const web = didiWebEntry(name, lat, lng);
-  launchApp(didiOnetravelUrl(name, lat, lng, web), web);
+function openDidiByKey(locKey) {
+  const loc = window._extLocs[locKey]; if (!loc) return;
+  // loc.taxi 是滴滴搜出来的 GCJ-02 准确坐标；没有则把 WGS-84 转成 GCJ-02
+  const g = loc.taxi || (() => {
+    const p = wgs84ToGcj02(loc.lat, loc.lng);
+    return { lat: p[0], lng: p[1] };
+  })();
+  const web = didiWebEntry(loc.name, g.lat, g.lng);
+  launchApp(didiOnetravelUrl(loc.name, g.lat, g.lng, web), web);
 }
 function openQunar(webUrl) {
   launchApp(qunarHyUrl(webUrl), webUrl);
@@ -637,10 +643,10 @@ function openHotel(locKey) {
   if (!loc.hotelParams) { openQunar(loc.hotel); return; }
   launchApp(qunarHotelScheme(loc.hotelParams), qunarHotelUrl(loc.hotelParams));
 }
-function didiLink(loc) {
+function didiLink(loc, dayId) {
   if (!needsTaxi(loc)) return '';
-  const safe = loc.name.replace(/'/g,"\\'");
-  return ` · <a href="#" onclick="event.preventDefault();openDidi('${safe}',${loc.lat},${loc.lng})">🚕 打车</a>`;
+  const safe = `${dayId}::${loc.name}`.replace(/'/g,"\\'");
+  return ` · <a href="#" onclick="event.preventDefault();openDidiByKey('${safe}')">🚕 打车</a>`;
 }
 
 window._extLocs = {};
@@ -665,7 +671,7 @@ function locCard(loc, dayIdx) {
   const safeKey = locKey.replace(/'/g,"\\'");
   const safeName = loc.name.replace(/'/g,"\\'");
   let lnk = `<button class="btn nav" onclick="openAS('${safeName}',${loc.lat},${loc.lng})">📍 导航</button>`;
-  if(needsTaxi(loc)) lnk += `<button class="btn taxi" onclick="openDidi('${safeName}',${loc.lat},${loc.lng})">🚕 打车</button>`;
+  if(needsTaxi(loc)) lnk += `<button class="btn taxi" onclick="openDidiByKey('${safeKey}')">🚕 打车</button>`;
   if(loc.xhs || loc.xhsKeyword || loc.type==='spot') {
     const xhsHref = IN_APP_WEBVIEW ? xhsWebUrl(loc) : xhsAppUrl(loc);
     const xhsLabel = IN_APP_WEBVIEW ? '📕 小红书' : '📕 小红书 App';
