@@ -7,8 +7,14 @@
 <meta name="description" content="两人广西 7 天休闲行程：桂林、阳朔、柳州、南宁、北海。高铁 + 动车 + 航班，含螺蛳粉、每天怎么走和预算。">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta name="apple-mobile-web-app-title" content="广西行程">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0071e3">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
+<script src="./leaflet/leaflet.js"></script>
 <style>
 /* ═══════════════════════════════════════════
    Design System — edit :root to change theme
@@ -795,6 +801,13 @@ function openAS(name, lat, lng) {
   ]);
 }
 function closeAS() { asOverlay.classList.remove('show'); }
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
